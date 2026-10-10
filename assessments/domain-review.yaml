@@ -1,0 +1,134 @@
+schema_version: 1
+kind: question_bank
+id: ats040-domain-review
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: domain
+  id: domain-review
+  title: Cloud Native Architecture
+placement:
+  position: after
+  reading: sections/section-030/module-01/course-03-summary.md
+questions:
+- id: ats040-domain-review-q01
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose metrics, logs or traces for a diagnostic question.
+  source_readings:
+  - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+  prompt: A latency metric worsens, a trace points to a slow database call, and logs report timeouts.
+    How should these signals be used?
+  options:
+  - id: a
+    text: Treat one sampled trace as the full population of requests.
+    explanation: Sampling does not capture every request.
+  - id: b
+    text: As complementary evidence about aggregate impact, request timing and specific errors.
+    explanation: They answer different questions about the same behavior.
+  - id: c
+    text: Discard all but the Pod name.
+    explanation: Object identity alone does not explain latency.
+  correct_option: b
+  explanation: They answer different questions about the same behavior.
+- id: ats040-domain-review-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Calculate an error budget and relate alerts to user impact.
+  source_readings:
+  - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+  prompt: An alert fires on every small CPU fluctuation while user success remains stable. What should
+    the team improve?
+  options:
+  - id: a
+    text: Connect urgent alerts to meaningful service symptoms or budget risk with a response path.
+    explanation: Actionability and user impact make reliability response more useful.
+  - id: b
+    text: Remove all instrumentation permanently.
+    explanation: That discards useful evidence rather than improving alert design.
+  - id: c
+    text: Assume a hardware graph is an SLA by itself.
+    explanation: An agreement and a raw resource measurement are different concepts.
+  correct_option: a
+  explanation: Actionability and user impact make reliability response more useful.
+- id: ats040-domain-review-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Relate resilience, elasticity and external state to replaceable workloads.
+  source_readings:
+  - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+  prompt: Adding stateless web replicas does not improve a saturated database. Why?
+  options:
+  - id: a
+    text: Stateless means no database can exist.
+    explanation: Handlers can externalize durable state to a database.
+  - id: b
+    text: Kubernetes always scales every external service together.
+    explanation: Infrastructure and application dependencies need their own mechanisms.
+  - id: c
+    text: The external stateful dependency remains the limiting resource.
+    explanation: Scaling handlers does not necessarily increase dependency capacity.
+  correct_option: c
+  explanation: Scaling handlers does not necessarily increase dependency capacity.
+- id: ats040-domain-review-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain asynchronous delivery, retries and idempotency.
+  source_readings:
+  - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+  prompt: A serverless worker retries a payment message after an uncertain acknowledgment. Which application
+    property matters?
+  options:
+  - id: a
+    text: A guarantee that no server executes the function.
+    explanation: Serverless workloads still execute on infrastructure.
+  - id: b
+    text: Safe repeated handling through idempotency or durable deduplication.
+    explanation: Platform execution and message delivery do not automatically ensure exactly-once effects.
+  - id: c
+    text: Only the project's foundation maturity.
+    explanation: Maturity does not implement transaction semantics.
+  correct_option: b
+  explanation: Platform execution and message delivery do not automatically ensure exactly-once effects.
+- id: ats040-domain-review-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose tools from requirements and operating constraints.
+  source_readings:
+  - sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+  prompt: A popular metrics system is proposed to reconcile desired Kubernetes resources from Git. What
+    question should decide the tool choice?
+  options:
+  - id: a
+    text: Whether the component implements the required delivery-controller responsibility.
+    explanation: Tool role and supported behavior matter more than popularity.
+  - id: b
+    text: Whether its name is short.
+    explanation: Naming does not establish feature support.
+  - id: c
+    text: Whether every hosted project performs the same job.
+    explanation: Ecosystem projects serve different responsibilities.
+  correct_option: a
+  explanation: Tool role and supported behavior matter more than popularity.
+- id: ats040-domain-review-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe an issue, pull request and review workflow.
+  source_readings:
+  - sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+  prompt: A team wants to contribute a security documentation correction to a mature project. What workflow
+    remains appropriate?
+  options:
+  - id: a
+    text: Merge directly because maturity grants every reader write access.
+    explanation: Governance still defines permissions and approval.
+  - id: b
+    text: Assume the license alone guarantees acceptance.
+    explanation: Reuse permissions and contribution review are distinct.
+  - id: c
+    text: Provide focused evidence, follow contribution requirements and complete maintainer review.
+    explanation: Maturity does not bypass the project's acceptance process.
+  correct_option: c
+  explanation: Maturity does not bypass the project's acceptance process.

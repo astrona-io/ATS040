@@ -1,0 +1,93 @@
+version: 1
+approval: KCNA-LESSON-PLAN.md approved; reading-only correction 2026-10-10
+course:
+  id: ATS040
+  certification:
+    name: Kubernetes and Cloud Native Associate
+    code: KCNA
+    provider: CNCF / Linux Foundation
+    domain: Cloud Native Architecture
+    weight: 12
+    competencies:
+    - Observability
+    - Cloud Native Ecosystem and Principles
+    - Cloud Native Community and Collaboration
+defaults:
+  playground: false
+  module_lab: false
+  capstone: false
+  section_quiz: true
+  final_quiz: true
+sections:
+- id: section-010
+  title: Observability
+  curriculum_item: Observability
+  modules:
+  - id: module-01
+    title: Observability And Reliability
+    objectives:
+    - Choose metrics, logs or traces for a diagnostic question.
+    - Explain instrumentation, collection and visualization responsibilities.
+    - Distinguish an SLI, SLO and SLA.
+    - Calculate an error budget and relate alerts to user impact.
+    outline:
+    - Metrics, Logs And Traces
+    - Instrumentation And Telemetry Pipelines
+    - Service Objectives, Budgets And Alerts
+    playground: false
+    module_lab: false
+    diagrams: []
+  capstone: false
+  section_quiz: true
+- id: section-020
+  title: Cloud Native Ecosystem and Principles
+  curriculum_item: Cloud Native Ecosystem and Principles
+  modules:
+  - id: module-01
+    title: Cloud Native Design
+    objectives:
+    - Explain loose coupling and microservice tradeoffs.
+    - Relate resilience, elasticity and external state to replaceable workloads.
+    - Distinguish serverless execution from the absence of servers.
+    - Explain asynchronous delivery, retries and idempotency.
+    outline:
+    - Boundaries, Resilience And Elasticity
+    - Serverless And Event-Driven Workloads
+    playground: false
+    module_lab: false
+    diagrams: []
+  - id: module-02
+    title: Cloud Native Ecosystem
+    objectives:
+    - Explain how open standards support interoperability.
+    - Match representative projects to their technical roles.
+    - Distinguish a specification, implementation and managed service.
+    - Choose tools from requirements and operating constraints.
+    outline:
+    - Standards And Implementation Boundaries
+    - Matching Projects To Platform Jobs
+    playground: false
+    module_lab: false
+    diagrams: []
+  capstone: false
+  section_quiz: true
+- id: section-030
+  title: Cloud Native Community and Collaboration
+  curriculum_item: Cloud Native Community and Collaboration
+  modules:
+  - id: module-01
+    title: Community And Collaboration
+    objectives:
+    - Explain project governance and foundation maturity categories.
+    - Distinguish licensing permission from contribution acceptance.
+    - Describe an issue, pull request and review workflow.
+    - Identify a suitable SIG or working group for a focused contribution.
+    outline:
+    - Governance, Maturity And Licenses
+    - Issues, Reviews And Working Groups
+    playground: false
+    module_lab: false
+    diagrams: []
+  capstone: false
+  section_quiz: true
+assessment_format: YAML question banks, schema version 1; indexed in assessments/index.yaml

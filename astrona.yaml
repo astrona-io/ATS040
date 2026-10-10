@@ -1,8 +1,9 @@
-# Preparation scaffold. Technical pages stay draft until authoring and review.
+# Reading-only course. YAML assessments are registered separately in assessments/index.yaml.
 training:
   id: ATS040
   title: 'KCNA: Cloud Native Architecture'
-  description: Preparation scaffold for Cloud Native Architecture. Lessons and environments are planned.
+  description: Concept lessons, diagrams and original scenario assessments covering every published objective
+    in this KCNA domain. No labs or playgrounds.
   certification:
     name: Kubernetes and Cloud Native Associate
     code: KCNA
@@ -16,7 +17,7 @@ training:
 modules:
 - id: module-intro
   title: Introduction
-  description: Planned introduction and authoring status.
+  description: Audience, learning approach, reading requirements and contribution process.
   content:
   - type: reading
     title: Introduction
@@ -32,31 +33,76 @@ modules:
     path: sections/intro/course-03-how-this-course-is-made.md
 - id: module-010
   title: Observability
-  description: Planned coverage of this curriculum objective.
+  description: Concept lessons and scenario reasoning for Observability.
+  draft: true
   content:
   - type: reading
-    title: Section Overview
+    title: 'Observability: Introduction'
     path: sections/section-010/README.md
   - type: reading
-    title: Observability
+    title: Observability And Reliability
     path: sections/section-010/module-01/course.md
+  - type: reading
+    title: Metrics, Logs And Traces
+    path: sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+  - type: reading
+    title: Instrumentation And Telemetry Pipelines
+    path: sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+  - type: reading
+    title: Service Objectives, Budgets And Alerts
+    path: sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-01/course-04-summary.md
 - id: module-020
   title: Cloud Native Ecosystem and Principles
-  description: Planned coverage of this curriculum objective.
+  description: Concept lessons and scenario reasoning for Cloud Native Ecosystem and Principles.
+  draft: true
   content:
   - type: reading
-    title: Section Overview
+    title: 'Cloud Native Ecosystem and Principles: Introduction'
     path: sections/section-020/README.md
   - type: reading
-    title: Cloud Native Ecosystem and Principles
+    title: Cloud Native Design
     path: sections/section-020/module-01/course.md
+  - type: reading
+    title: Boundaries, Resilience And Elasticity
+    path: sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+  - type: reading
+    title: Serverless And Event-Driven Workloads
+    path: sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-01/course-03-summary.md
+  - type: reading
+    title: Cloud Native Ecosystem
+    path: sections/section-020/module-02/course.md
+  - type: reading
+    title: Standards And Implementation Boundaries
+    path: sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
+  - type: reading
+    title: Matching Projects To Platform Jobs
+    path: sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-02/course-03-summary.md
 - id: module-030
   title: Cloud Native Community and Collaboration
-  description: Planned coverage of this curriculum objective.
+  description: Concept lessons and scenario reasoning for Cloud Native Community and Collaboration.
+  draft: true
   content:
   - type: reading
-    title: Section Overview
+    title: 'Cloud Native Community and Collaboration: Introduction'
     path: sections/section-030/README.md
   - type: reading
-    title: Cloud Native Community and Collaboration
+    title: Community And Collaboration
     path: sections/section-030/module-01/course.md
+  - type: reading
+    title: Governance, Maturity And Licenses
+    path: sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
+  - type: reading
+    title: Issues, Reviews And Working Groups
+    path: sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-01/course-03-summary.md
