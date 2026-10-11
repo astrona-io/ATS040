@@ -1,0 +1,112 @@
+schema_version: 1
+kind: question_bank
+id: ats040-section-030
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: section
+  id: section-030
+  title: Cloud Native Community and Collaboration
+placement:
+  position: after
+  reading: sections/section-030/module-01/course-03-summary.md
+questions:
+- id: ats040-section-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain project governance and foundation maturity categories.
+  source_readings:
+  - sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
+  prompt: A project is Graduated within the CNCF. What can reasonably be inferred?
+  options:
+  - id: a
+    text: It is necessarily best for every workload.
+    explanation: Requirements and operating constraints still matter.
+  - id: b
+    text: It has met the foundation's assessed maturity criteria, while suitability still needs evaluation.
+    explanation: The category supplies maturity evidence rather than a universal guarantee.
+  - id: c
+    text: It cannot contain security defects.
+    explanation: Maturity does not prove absence of defects.
+  correct_option: b
+  explanation: The category supplies maturity evidence rather than a universal guarantee.
+- id: ats040-section-030-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish licensing permission from contribution acceptance.
+  source_readings:
+  - sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
+  prompt: A contributor may legally modify software under its license. Does that guarantee a proposed
+    change will be accepted?
+  options:
+  - id: a
+    text: No; the project's contribution and review requirements also apply.
+    explanation: Reuse permission and maintainer acceptance are separate contracts.
+  - id: b
+    text: Yes; license permission bypasses review.
+    explanation: Licensing does not grant automatic merge approval.
+  - id: c
+    text: No one can ever propose a change to licensed code.
+    explanation: Open source projects commonly accept contributions through their processes.
+  correct_option: a
+  explanation: Reuse permission and maintainer acceptance are separate contracts.
+- id: ats040-section-030-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe an issue, pull request and review workflow.
+  source_readings:
+  - sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+  prompt: A documentation statement appears wrong. What makes an issue most useful?
+  options:
+  - id: a
+    text: Only a demand to rewrite the entire project.
+    explanation: It does not establish a bounded supported problem.
+  - id: b
+    text: A password from a production environment.
+    explanation: Sensitive credentials are not needed for a documentation report.
+  - id: c
+    text: A focused report of the statement, expected behavior and supporting evidence.
+    explanation: Clear scope and reproducible evidence help maintainers assess the correction.
+  correct_option: c
+  explanation: Clear scope and reproducible evidence help maintainers assess the correction.
+- id: ats040-section-030-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Identify a suitable SIG or working group for a focused contribution.
+  source_readings:
+  - sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+  prompt: A contributor wants to propose a Kubernetes networking change. How should a community group
+    be selected?
+  options:
+  - id: a
+    text: Choose only the group with the shortest name.
+    explanation: Naming length does not determine ownership.
+  - id: b
+    text: Check the relevant SIG's published scope and contribution process.
+    explanation: Community ownership and norms identify the suitable review path.
+  - id: c
+    text: Send the proposal to every unrelated group.
+    explanation: That ignores scope and increases noise.
+  correct_option: b
+  explanation: Community ownership and norms identify the suitable review path.
+- id: ats040-section-030-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe an issue, pull request and review workflow.
+  source_readings:
+  - sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+  prompt: A reviewer requests revisions to a focused pull request. What is a constructive response?
+  options:
+  - id: a
+    text: Address the evidence, revise the change and align the description with the final result.
+    explanation: Review assesses the current proposal and its supported behavior.
+  - id: b
+    text: Assume opening the pull request already granted merge permission.
+    explanation: Maintainer approval still applies.
+  - id: c
+    text: Remove relevant checks to avoid further discussion.
+    explanation: That reduces evidence rather than resolving the review concern.
+  correct_option: a
+  explanation: Review assesses the current proposal and its supported behavior.

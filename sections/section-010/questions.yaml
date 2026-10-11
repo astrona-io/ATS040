@@ -1,0 +1,152 @@
+schema_version: 1
+kind: question_bank
+id: ats040-section-010
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: section
+  id: section-010
+  title: Observability
+placement:
+  position: after
+  reading: sections/section-010/module-01/course-04-summary.md
+questions:
+- id: ats040-section-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose metrics, logs or traces for a diagnostic question.
+  source_readings:
+  - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+  prompt: A team wants aggregate request error rate over time. Which signal directly supports that trend?
+  options:
+  - id: a
+    text: An image digest.
+    explanation: Artifact identity is not a request outcome measure.
+  - id: b
+    text: Metrics.
+    explanation: Numerical measurements can summarize the changing rate.
+  - id: c
+    text: Only one arbitrary stack trace.
+    explanation: One event does not establish an aggregate rate.
+  correct_option: b
+  explanation: Numerical measurements can summarize the changing rate.
+- id: ats040-section-010-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose metrics, logs or traces for a diagnostic question.
+  source_readings:
+  - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+  prompt: A sampled request is slow across several services. Which signal best shows where its timed operations
+    occurred?
+  options:
+  - id: a
+    text: A distributed trace.
+    explanation: Related spans expose the request's cross-component timing.
+  - id: b
+    text: Only a total monthly request count.
+    explanation: An aggregate count lacks the per-request operation path.
+  - id: c
+    text: The namespace's name.
+    explanation: Scope identity does not describe request timing.
+  correct_option: a
+  explanation: Related spans expose the request's cross-component timing.
+- id: ats040-section-010-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain instrumentation, collection and visualization responsibilities.
+  source_readings:
+  - sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+  prompt: A team installs an OpenTelemetry Collector but has no suitable storage or query backend. What
+    remains missing?
+  options:
+  - id: a
+    text: Nothing; every collector automatically includes every telemetry database.
+    explanation: The collector does not inherently provide all backend functions.
+  - id: b
+    text: A Deployment label matching the collector name.
+    explanation: Labels do not create telemetry retention.
+  - id: c
+    text: A backend to retain and query the exported telemetry.
+    explanation: Collection and durable analysis are separate responsibilities.
+  correct_option: c
+  explanation: Collection and durable analysis are separate responsibilities.
+- id: ats040-section-010-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain instrumentation, collection and visualization responsibilities.
+  source_readings:
+  - sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+  prompt: A metric uses a unique customer identifier for every request as a label. What concern does this
+    introduce?
+  options:
+  - id: a
+    text: Automatic encryption of all customer data.
+    explanation: Labels are dimensions rather than a confidentiality mechanism.
+  - id: b
+    text: Excessive cardinality and too many distinct time series.
+    explanation: Unbounded label values can make storage and queries expensive.
+  - id: c
+    text: A guarantee that every trace is retained.
+    explanation: Metric labels do not set trace sampling policy.
+  correct_option: b
+  explanation: Unbounded label values can make storage and queries expensive.
+- id: ats040-section-010-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish an SLI, SLO and SLA.
+  source_readings:
+  - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+  prompt: Which statement distinguishes SLI, SLO and SLA correctly?
+  options:
+  - id: a
+    text: An SLI measures behavior, an SLO sets a target, and an SLA can define contractual consequences.
+    explanation: The terms refer to different parts of a reliability commitment.
+  - id: b
+    text: An SLO is the raw log record and an SLI is the contract.
+    explanation: That reverses measurement and commitment concepts.
+  - id: c
+    text: An SLA automatically implements every health check.
+    explanation: An agreement does not implement application instrumentation.
+  correct_option: a
+  explanation: The terms refer to different parts of a reliability commitment.
+- id: ats040-section-010-q06
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Calculate an error budget and relate alerts to user impact.
+  source_readings:
+  - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+  prompt: An objective allows 0.1% failures in 100,000 eligible requests. Eighty have failed. How many
+    failures remain in this window's budget?
+  options:
+  - id: a
+    text: '1000.'
+    explanation: That would allow a different failure fraction than the specified objective.
+  - id: b
+    text: Zero because every SLO requires perfect success.
+    explanation: The stated target explicitly permits a bounded unsuccessful fraction.
+  - id: c
+    text: '20.'
+    explanation: The budget permits 100 failures; subtracting 80 leaves 20.
+  correct_option: c
+  explanation: The budget permits 100 failures; subtracting 80 leaves 20.
+- id: ats040-section-010-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Calculate an error budget and relate alerts to user impact.
+  source_readings:
+  - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+  prompt: Which alert is most directly suited to an urgent service reliability response?
+  options:
+  - id: a
+    text: Every new metric label automatically.
+    explanation: Label creation alone is not an urgent reliability symptom.
+  - id: b
+    text: A sustained user-impacting failure or fast budget consumption with an owner and response path.
+    explanation: Actionable alerts connect meaningful symptoms to a defined action.
+  - id: c
+    text: Every small CPU fluctuation regardless of impact.
+    explanation: That can generate noise without evidence of a service problem.
+  correct_option: b
+  explanation: Actionable alerts connect meaningful symptoms to a defined action.
