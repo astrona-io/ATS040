@@ -34,7 +34,7 @@ modules:
 - id: module-010
   title: Observability
   description: Concept lessons and scenario reasoning for Observability.
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: 'Observability: Introduction'
@@ -57,7 +57,7 @@ modules:
 - id: module-020
   title: Cloud Native Ecosystem and Principles
   description: Concept lessons and scenario reasoning for Cloud Native Ecosystem and Principles.
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: 'Cloud Native Ecosystem and Principles: Introduction'
@@ -89,7 +89,7 @@ modules:
 - id: module-030
   title: Cloud Native Community and Collaboration
   description: Concept lessons and scenario reasoning for Cloud Native Community and Collaboration.
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: 'Cloud Native Community and Collaboration: Introduction'
