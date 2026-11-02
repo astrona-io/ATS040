@@ -1,0 +1,134 @@
+schema_version: 1
+kind: question_bank
+id: ats040-section-020
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: section
+  id: section-020
+  title: Cloud Native Ecosystem and Principles
+placement:
+  position: after
+  reading: sections/section-020/module-02/course-03-summary.md
+questions:
+- id: ats040-section-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain loose coupling and microservice tradeoffs.
+  source_readings:
+  - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+  prompt: A small team splits every function into a remote service without an ownership or scaling benefit.
+    What tradeoff should be considered?
+  options:
+  - id: a
+    text: Containers cannot run modular monoliths.
+    explanation: Container packaging does not require microservice architecture.
+  - id: b
+    text: Distributed latency, failures and operating complexity may outweigh the benefit.
+    explanation: Microservices should serve useful boundaries rather than a count target.
+  - id: c
+    text: More services automatically guarantee simpler operations.
+    explanation: Distributed components introduce additional contracts and failure modes.
+  correct_option: b
+  explanation: Microservices should serve useful boundaries rather than a count target.
+- id: ats040-section-020-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Relate resilience, elasticity and external state to replaceable workloads.
+  source_readings:
+  - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+  prompt: Stateless request handlers store durable transactions in a database. Which statement is correct?
+  options:
+  - id: a
+    text: The handlers externalize state; the application still depends on stateful storage.
+    explanation: Stateless instances do not mean the complete application has no state.
+  - id: b
+    text: No backup is needed because the handlers are stateless.
+    explanation: Durable external data still needs recovery protection.
+  - id: c
+    text: Adding handlers always removes a database bottleneck.
+    explanation: The dependency's capacity can remain the limiting factor.
+  correct_option: a
+  explanation: Stateless instances do not mean the complete application has no state.
+- id: ats040-section-020-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain asynchronous delivery, retries and idempotency.
+  source_readings:
+  - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+  prompt: A queue may deliver a work message more than once. What application property helps prevent duplicate
+    effects?
+  options:
+  - id: a
+    text: Ignoring acknowledgments entirely.
+    explanation: That does not ensure completion or prevent repetition.
+  - id: b
+    text: Assuming queues guarantee exactly-once business transactions.
+    explanation: Delivery and external transaction completion are separate events.
+  - id: c
+    text: Idempotent handling or another durable deduplication mechanism.
+    explanation: Repeated delivery needs safe handling of external effects.
+  correct_option: c
+  explanation: Repeated delivery needs safe handling of external effects.
+- id: ats040-section-020-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish serverless execution from the absence of servers.
+  source_readings:
+  - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+  prompt: Which statement correctly describes serverless?
+  options:
+  - id: a
+    text: No machines execute the function.
+    explanation: Functions still run on infrastructure.
+  - id: b
+    text: The platform manages selected infrastructure concerns while servers and execution constraints
+      still exist.
+    explanation: The operating responsibility changes rather than hardware disappearing.
+  - id: c
+    text: The application has no permissions or failure modes to manage.
+    explanation: Application correctness and access remain relevant.
+  correct_option: b
+  explanation: The operating responsibility changes rather than hardware disappearing.
+- id: ats040-section-020-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish a specification, implementation and managed service.
+  source_readings:
+  - sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
+  prompt: A platform supports an OCI image format but depends on one proprietary external database. What
+    portability limit remains?
+  options:
+  - id: a
+    text: The external dependency can still tie the application to a particular platform.
+    explanation: Artifact compatibility does not remove all dependency contracts.
+  - id: b
+    text: OCI support guarantees complete database portability.
+    explanation: The image contract does not define every external data service.
+  - id: c
+    text: The artifact cannot run on any compatible runtime.
+    explanation: The stated external limitation does not invalidate its image-format compatibility.
+  correct_option: a
+  explanation: Artifact compatibility does not remove all dependency contracts.
+- id: ats040-section-020-q06
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Match representative projects to their technical roles.
+  source_readings:
+  - sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+  prompt: The requirement is to reconcile Kubernetes configuration from versioned sources. Which project
+    role should be evaluated?
+  options:
+  - id: a
+    text: Only a container runtime such as containerd.
+    explanation: Runtime execution does not itself provide the required delivery workflow.
+  - id: b
+    text: Only a metrics collector.
+    explanation: Telemetry transport does not apply versioned application intent.
+  - id: c
+    text: A GitOps delivery controller such as Argo CD or Flux.
+    explanation: That role addresses automated desired-state reconciliation.
+  correct_option: c
+  explanation: That role addresses automated desired-state reconciliation.
