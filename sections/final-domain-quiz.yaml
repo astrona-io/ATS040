@@ -1,0 +1,373 @@
+# Knowledge check. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats040-final
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: ats040
+  title: "KCNA: Cloud Native Architecture"
+questions:
+  - id: ats040-final-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the signal"
+    source_readings:
+      - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+    prompt: |-
+      Which signal best shows the trend of the 5xx ratio of `beacon` over a week?
+    options:
+      - id: a
+        text: "Traces only."
+        explanation: "Traces describe single requests and are sampled."
+      - id: b
+        text: "Metrics, because they are numeric samples over time."
+        explanation: "Correct. Metrics are cheap to store and fit trends. Logs and traces describe single events and requests."
+      - id: c
+        text: "Logs only."
+        explanation: "Logs record events, and a ratio over a week needs aggregation that metrics already provide."
+      - id: d
+        text: "Kubernetes events."
+        explanation: "Events are about objects, not requests."
+    correct_option: b
+    explanation: "Metrics are cheap to store and fit trends. Logs and traces describe single events and requests."
+
+  - id: ats040-final-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compute a budget"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      An objective of 99.5 percent over 30 days leaves how many minutes of error budget?
+    options:
+      - id: a
+        text: "21.6"
+        explanation: "This is 0.05 percent, a 99.95 percent objective."
+      - id: b
+        text: "432"
+        explanation: "This is 1 percent, a 99 percent objective."
+      - id: c
+        text: "216"
+        explanation: "Correct. 0.5 percent of 43200 minutes is 216."
+      - id: d
+        text: "129.6"
+        explanation: "This does not match any objective. 0.5 percent of 43200 is 216."
+    correct_option: c
+    explanation: "0.5 percent of 43200 minutes is 216."
+
+  - id: ats040-final-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the for clause"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      Why do alert rules usually include a `for` duration?
+    options:
+      - id: a
+        text: "To make the alert fire faster."
+        explanation: "`for` only delays firing."
+      - id: b
+        text: "To store the alert for later."
+        explanation: "Storage is not its purpose."
+      - id: c
+        text: "To change the scrape interval."
+        explanation: "The scrape interval is set in the scrape configuration."
+      - id: d
+        text: "So that a short spike does not fire the alert."
+        explanation: "Correct. The alert is pending until the condition holds for the full duration."
+    correct_option: d
+    explanation: "The alert is pending until the condition holds for the full duration."
+
+  - id: ats040-final-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the probe action"
+    source_readings:
+      - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+    prompt: |-
+      Which probe failure removes a pod from Service endpoints without restarting it?
+    options:
+      - id: a
+        text: "Readiness"
+        explanation: "Correct. The readiness probe controls traffic. Liveness controls restarts."
+      - id: b
+        text: "Liveness"
+        explanation: "A liveness failure restarts the container."
+      - id: c
+        text: "Startup"
+        explanation: "A startup failure restarts the container as well."
+      - id: d
+        text: "None of them"
+        explanation: "Readiness does remove the pod from endpoints."
+    correct_option: a
+    explanation: "The readiness probe controls traffic. Liveness controls restarts."
+
+  - id: ats040-final-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Protect against drains"
+    source_readings:
+      - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+    prompt: |-
+      Which object limits how many pods of an application a drain may evict at once?
+    options:
+      - id: a
+        text: "A ResourceQuota"
+        explanation: "A quota limits resource totals in a namespace."
+      - id: b
+        text: "A PodDisruptionBudget"
+        explanation: "Correct. The budget applies to voluntary evictions such as a drain."
+      - id: c
+        text: "A LimitRange"
+        explanation: "A LimitRange sets default and maximum resources per object."
+      - id: d
+        text: "A NetworkPolicy"
+        explanation: "A policy controls network traffic."
+    correct_option: b
+    explanation: "The budget applies to voluntary evictions such as a drain."
+
+  - id: ats040-final-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle retries"
+    source_readings:
+      - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+    prompt: |-
+      Retries and at-least-once delivery together require what from the consumer?
+    options:
+      - id: a
+        text: "Exactly-once guarantees from the network."
+        explanation: "A network alone cannot guarantee this."
+      - id: b
+        text: "Disabling acknowledgments."
+        explanation: "This would lose messages."
+      - id: c
+        text: "Idempotent handling, so that a repeated message has no second effect."
+        explanation: "Correct. Duplicates are expected, so the effect must be the same when repeated."
+      - id: d
+        text: "A larger node."
+        explanation: "Capacity does not remove duplicates."
+    correct_option: c
+    explanation: "Duplicates are expected, so the effect must be the same when repeated."
+
+  - id: ats040-final-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compute scaling"
+    source_readings:
+      - sections/section-020/module-03/course-01-horizontal-pod-autoscaler.md
+    prompt: |-
+      Current replicas are 3, current CPU utilization is 100 percent and the target is 50 percent. What replica count does the autoscaler ask for?
+    options:
+      - id: a
+        text: "3"
+        explanation: "The ratio is 2, so the count doubles."
+      - id: b
+        text: "4"
+        explanation: "This does not match the formula."
+      - id: c
+        text: "5"
+        explanation: "This does not match the formula."
+      - id: d
+        text: "6"
+        explanation: "Correct. ceil(3 * 100 / 50) = 6."
+    correct_option: d
+    explanation: "ceil(3 * 100 / 50) = 6."
+
+  - id: ats040-final-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the scaler for nodes"
+    source_readings:
+      - sections/section-020/module-03/course-02-vertical-and-cluster-scaling.md
+    prompt: |-
+      Which component changes the number of nodes?
+    options:
+      - id: a
+        text: "The Cluster Autoscaler"
+        explanation: "Correct. It adds nodes for unschedulable pods and removes idle ones."
+      - id: b
+        text: "The Horizontal Pod Autoscaler"
+        explanation: "It changes the number of pods."
+      - id: c
+        text: "The Vertical Pod Autoscaler"
+        explanation: "It changes pod resource requests."
+      - id: d
+        text: "The Deployment controller"
+        explanation: "It manages ReplicaSets."
+    correct_option: a
+    explanation: "It adds nodes for unschedulable pods and removes idle ones."
+
+  - id: ats040-final-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match the project"
+    source_readings:
+      - sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+    prompt: |-
+      Which CNCF project is mainly a metrics and alerting system?
+    options:
+      - id: a
+        text: "Argo CD"
+        explanation: "It reconciles clusters to Git."
+      - id: b
+        text: "Prometheus"
+        explanation: "Correct. Prometheus scrapes metrics, stores them and evaluates alert rules."
+      - id: c
+        text: "Envoy"
+        explanation: "It is a proxy."
+      - id: d
+        text: "containerd"
+        explanation: "It is a container runtime."
+    correct_option: b
+    explanation: "Prometheus scrapes metrics, stores them and evaluates alert rules."
+
+  - id: ats040-final-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain a CRD"
+    source_readings:
+      - sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
+    prompt: |-
+      What does a CRD allow?
+    options:
+      - id: a
+        text: "A new node type."
+        explanation: "Nodes are not defined by CRDs."
+      - id: b
+        text: "A new container image format."
+        explanation: "Image formats are set by the OCI."
+      - id: c
+        text: "A new resource type in the Kubernetes API."
+        explanation: "Correct. It extends the API with a kind that has its own schema."
+      - id: d
+        text: "A new scheduler plugin."
+        explanation: "Plugins are configured separately."
+    correct_option: c
+    explanation: "It extends the API with a kind that has its own schema."
+
+  - id: ats040-final-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order maturity levels"
+    source_readings:
+      - sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
+    prompt: |-
+      CNCF project levels from earliest to latest:
+    options:
+      - id: a
+        text: "Graduated, sandbox, incubating"
+        explanation: "This is not the lifecycle order."
+      - id: b
+        text: "Incubating, graduated, sandbox"
+        explanation: "Sandbox comes first."
+      - id: c
+        text: "Beta, alpha, stable"
+        explanation: "These are API levels."
+      - id: d
+        text: "Sandbox, incubating, graduated"
+        explanation: "Correct. This is the order of the project lifecycle."
+    correct_option: d
+    explanation: "This is the order of the project lifecycle."
+
+  - id: ats040-final-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the group type"
+    source_readings:
+      - sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+    prompt: |-
+      A short-lived effort needs several SIGs to cooperate on one topic. Which structure fits?
+    options:
+      - id: a
+        text: "A working group"
+        explanation: "Correct. Working groups are for cross-cutting topics and have a limited life."
+      - id: b
+        text: "A new CNCF project"
+        explanation: "A project is a software effort, not a coordination group."
+      - id: c
+        text: "A release team"
+        explanation: "A release team runs releases."
+      - id: d
+        text: "A feature gate"
+        explanation: "A gate toggles a feature."
+    correct_option: a
+    explanation: "Working groups are for cross-cutting topics and have a limited life."
+
+  - id: ats040-final-q13
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "State the beta window"
+    source_readings:
+      - sections/section-030/module-02/course-02-deprecation-policy-and-finding-deprecated-use.md
+    prompt: |-
+      How long is a deprecated beta API version kept?
+    options:
+      - id: a
+        text: "3 months"
+        explanation: "This is shorter than the policy."
+      - id: b
+        text: "9 months or 3 releases, whichever is longer."
+        explanation: "Correct. This is the window in the deprecation policy for beta versions."
+      - id: c
+        text: "Forever"
+        explanation: "Only stable versions are kept within a major version."
+      - id: d
+        text: "Until the next patch release"
+        explanation: "The policy counts minor releases and time."
+    correct_option: b
+    explanation: "This is the window in the deprecation policy for beta versions."
+
+  - id: ats040-final-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Detect deprecated use"
+    source_readings:
+      - sections/section-030/module-02/course-02-deprecation-policy-and-finding-deprecated-use.md
+    prompt: |-
+      Which signal counts client requests to deprecated API versions?
+    options:
+      - id: a
+        text: "The node `Ready` condition"
+        explanation: "It reports node health."
+      - id: b
+        text: "The `up` metric"
+        explanation: "It reports scrape success."
+      - id: c
+        text: "The `apiserver_requested_deprecated_apis` metric"
+        explanation: "Correct. The API server records each request to a deprecated version."
+      - id: d
+        text: "The Pod phase"
+        explanation: "It reports pod lifecycle."
+    correct_option: c
+    explanation: "The API server records each request to a deprecated version."
+
+  - id: ats040-final-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Validate a migrated manifest"
+    source_readings:
+      - sections/section-030/module-02/course-03-migrating-manifests-to-current-versions.md
+    prompt: |-
+      Which command validates a migrated manifest against the live API without keeping the object?
+    options:
+      - id: a
+        text: "`kubectl apply --dry-run=client -f file.yaml`"
+        explanation: "A client dry run does not ask the server."
+      - id: b
+        text: "`kubectl get -f file.yaml`"
+        explanation: "This reads existing objects."
+      - id: c
+        text: "`kubectl replace -f file.yaml`"
+        explanation: "This stores the object."
+      - id: d
+        text: "`kubectl apply --dry-run=server -f file.yaml`"
+        explanation: "Correct. A server dry run runs validation and admission and discards the result."
+    correct_option: d
+    explanation: "A server dry run runs validation and admission and discards the result."
+

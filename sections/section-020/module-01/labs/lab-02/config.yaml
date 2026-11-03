@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Run Retried Work With A Job And A CronJob (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-020-01-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: job-retry-limits
+      description: "Job process-event has backoffLimit 4, a 120 second deadline and a cleanup time"
+      type: file
+      source: validation/validate-job-spec.sh
+      hint: "Set backoffLimit: 4, activeDeadlineSeconds: 120 and ttlSecondsAfterFinished: 600 on the Job."
+    - name: job-restart-policy
+      description: "The Job pod template uses restartPolicy Never or OnFailure"
+      type: file
+      source: validation/validate-restart-policy.sh
+      hint: "A Job cannot use Always. Use Never or OnFailure."
+    - name: job-sends-idempotency-key
+      description: "The Job command sends the header Idempotency-Key: evt-1001"
+      type: file
+      source: validation/validate-idempotency-key.sh
+      hint: "Pass -H \"Idempotency-Key: evt-1001\" to curl."
+    - name: job-completed
+      description: "The Job completed once"
+      type: file
+      source: validation/validate-job-complete.sh
+      hint: "The request must reach http://probe.starfleet.svc.cluster.local/anything and use curl -f so an HTTP error fails the pod."
+    - name: cronjob-policy
+      description: "CronJob nightly-report has the schedule, Forbid policy, deadline, history limits and is suspended"
+      type: file
+      source: validation/validate-cronjob.sh
+      hint: "Use schedule 0 2 * * *, concurrencyPolicy Forbid, startingDeadlineSeconds 300, history limits 2 and suspend true."
+
+teardown:
+  keepCluster: false

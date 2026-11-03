@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Scrape And Alert On The scout Error Budget (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-010-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+      - quay.io/prometheus/prometheus:v3.5.0
+
+# Starting state: Prometheus scrapes only itself and has an empty rules file;
+# scout, probe and shuttle run in starfleet.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create Prometheus, the example workloads and the request loop
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: scout-job-configured
+      description: Prometheus has a scout scrape target with the right address, interval and env label
+      type: file
+      source: validation/validate-scout-job.sh
+      hint: Add a job named scout with static_configs target scout.starfleet.svc.cluster.local:9898, scrape_interval 10s and labels env lab, then restart Prometheus.
+    - name: scout-up
+      description: up{job="scout"} is 1
+      type: file
+      source: validation/validate-scout-up.sh
+      hint: The target must be reachable. Check the host name and port 9898, and that Prometheus loaded the new configuration.
+    - name: error-ratio-recording-rule
+      description: Recording rule scout:http_error_ratio:rate5m exists and returns the 5xx ratio
+      type: file
+      source: validation/validate-recording-rule.sh
+      hint: Use record, and divide the rate of http_requests_total with status=~"5.." by the rate of all requests. Wait for one evaluation interval.
+    - name: budget-burn-alert-rule
+      description: Alert ScoutErrorBudgetBurn has the right threshold, for, label and annotation
+      type: file
+      source: validation/validate-alert-rule.sh
+      hint: expr is the recorded ratio greater than 14.4 * 0.001, for 2m, label severity page, annotation summary.
+    - name: budget-burn-alert-firing
+      description: ScoutErrorBudgetBurn is firing
+      type: file
+      source: validation/validate-alert-firing.sh
+      hint: The loop produces about 10% errors, above 1.44%. Wait about 3 minutes after the rule loads, because the 5 minute rate and the 2 minute for need time.
+    - name: prometheus-and-shuttle-running
+      description: Prometheus is Ready and shuttle keeps running
+      type: file
+      source: validation/validate-prometheus-ready.sh
+      hint: An invalid configuration or rules file keeps Prometheus from starting. Do not delete or break shuttle.
+
+teardown:
+  keepCluster: false

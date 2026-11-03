@@ -1,0 +1,253 @@
+# Knowledge check. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats040-010
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Observability"
+questions:
+  - id: ats040-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the signal that answers a diagnostic question"
+    source_readings:
+      - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+    prompt: |-
+      A request to `beacon` crosses three services and is slow. Which signal shows how much time each service spent on that one request?
+    options:
+      - id: a
+        text: "A metric such as a request counter, because it stores one value per service."
+        explanation: "A counter shows how many requests happened, not how long one request spent in each service."
+      - id: b
+        text: "A trace, because it links the timed steps of one request across services."
+        explanation: "Correct. A trace holds timed spans that share one trace identifier, so it shows where the time went for a single request."
+      - id: c
+        text: "A log line from the load balancer, because it records every request."
+        explanation: "One log line records one event in one component and does not link the steps across services."
+      - id: d
+        text: "A Kubernetes event on the Deployment, because it lists changes to the workload."
+        explanation: "Events describe changes to Kubernetes objects and say nothing about request timing."
+    correct_option: b
+    explanation: "A trace holds timed spans that share one trace identifier, so it shows where the time went for a single request."
+
+  - id: ats040-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read a counter correctly"
+    source_readings:
+      - sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+    prompt: |-
+      The metric `http_requests_total` only ever grows. Which expression shows requests per second over the last 5 minutes?
+    options:
+      - id: a
+        text: "`http_requests_total[5m]`"
+        explanation: "This returns a range of raw samples, not a per-second value."
+      - id: b
+        text: "`sum(http_requests_total)`"
+        explanation: "This adds the counters together and still grows without bound."
+      - id: c
+        text: "`rate(http_requests_total[5m])`"
+        explanation: "Correct. `rate` turns a growing counter into a per-second value over the window."
+      - id: d
+        text: "`delta(http_requests_total[5m])`"
+        explanation: "`delta` is meant for gauges, and it does not handle counter resets."
+    correct_option: c
+    explanation: "`rate` turns a growing counter into a per-second value over the window."
+
+  - id: ats040-010-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain label cardinality"
+    source_readings:
+      - sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+    prompt: |-
+      A developer adds the label `user_id` to a request metric. The service has two million users. What is the most likely result?
+    options:
+      - id: a
+        text: "The metric becomes more precise and costs nothing extra."
+        explanation: "Every label value is a separate series that Prometheus must store and index."
+      - id: b
+        text: "Prometheus drops the label automatically after 1000 values."
+        explanation: "Prometheus does not drop labels by itself."
+      - id: c
+        text: "Only the scrape interval changes."
+        explanation: "The scrape interval is a separate setting and does not depend on labels."
+      - id: d
+        text: "Prometheus stores one series per label combination, so memory and query cost grow sharply."
+        explanation: "Correct. Each distinct label value creates a new time series, so an unbounded label such as a user identifier causes high cardinality."
+    correct_option: d
+    explanation: "Each distinct label value creates a new time series, so an unbounded label such as a user identifier causes high cardinality."
+
+  - id: ats040-010-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use the up metric"
+    source_readings:
+      - sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+    prompt: |-
+      Prometheus scrapes `beacon` every 10 seconds. Which query returns a result of 0 when the target cannot be scraped?
+    options:
+      - id: a
+        text: "`up{job=\"beacon\"}`"
+        explanation: "Correct. Prometheus records `up` as 1 for a successful scrape and 0 for a failed one."
+      - id: b
+        text: "`http_requests_total{job=\"beacon\"}`"
+        explanation: "This counter is exposed by the application and has no value for a failed scrape."
+      - id: c
+        text: "`scrape_config{job=\"beacon\"}`"
+        explanation: "This is not a metric that Prometheus records."
+      - id: d
+        text: "`rate(up[5m]) == 0`"
+        explanation: "`up` is a gauge, and a rate of it is not the way to detect a failed scrape."
+    correct_option: a
+    explanation: "Prometheus records `up` as 1 for a successful scrape and 0 for a failed one."
+
+  - id: ats040-010-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe the role of the collector"
+    source_readings:
+      - sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+    prompt: |-
+      A platform team wants applications to send telemetry in one format and to change the backend without changing application code. What fits?
+    options:
+      - id: a
+        text: "Write a custom exporter in each application for each backend."
+        explanation: "This ties every application to a backend and repeats work."
+      - id: b
+        text: "Instrument with OpenTelemetry and send to an OpenTelemetry Collector that exports to the chosen backend."
+        explanation: "Correct. The Collector receives, processes and exports telemetry, so a backend change is a Collector change."
+      - id: c
+        text: "Store telemetry in the container file system and copy it later."
+        explanation: "Pod storage is lost when the pod is replaced and gives no common format."
+      - id: d
+        text: "Use Kubernetes events as the telemetry format."
+        explanation: "Events describe object changes and are not application telemetry."
+    correct_option: b
+    explanation: "The Collector receives, processes and exports telemetry, so a backend change is a Collector change."
+
+  - id: ats040-010-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell an SLI from an SLO"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      The team measures the share of requests that return a non-5xx status. The agreed target for that share is 99.5 percent over 30 days. Which statement is correct?
+    options:
+      - id: a
+        text: "The measured share is the SLO and the target is the SLI."
+        explanation: "The names are reversed."
+      - id: b
+        text: "Both are SLAs."
+        explanation: "An SLA is a contract with consequences, which is different from an internal target."
+      - id: c
+        text: "The measured share is the SLI and the target is the SLO."
+        explanation: "Correct. An SLI is a measurement of service behavior, and an SLO is the target value for it."
+      - id: d
+        text: "The target is an error budget."
+        explanation: "The error budget is the allowed amount of failure derived from the target."
+    correct_option: c
+    explanation: "An SLI is a measurement of service behavior, and an SLO is the target value for it."
+
+  - id: ats040-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compute an error budget"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      The objective is 99.9 percent availability over 30 days. How much downtime does the error budget allow?
+    options:
+      - id: a
+        text: "4.32 minutes"
+        explanation: "This is 0.01 percent of the period, a 99.99 percent objective."
+      - id: b
+        text: "432 minutes"
+        explanation: "This is 1 percent of the period, a 99 percent objective."
+      - id: c
+        text: "72 minutes"
+        explanation: "This does not match the objective. 0.1 percent of 43200 minutes is 43.2 minutes."
+      - id: d
+        text: "43.2 minutes"
+        explanation: "Correct. 30 days have 43200 minutes, and 0.1 percent of 43200 is 43.2 minutes."
+    correct_option: d
+    explanation: "30 days have 43200 minutes, and 0.1 percent of 43200 is 43.2 minutes."
+
+  - id: ats040-010-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Compute a burn-rate threshold"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      The objective is 99.5 percent. An alert must fire when the budget burns 14.4 times faster than allowed. What error ratio is the threshold?
+    options:
+      - id: a
+        text: "0.072"
+        explanation: "Correct. The allowed ratio is 0.005, and 14.4 * 0.005 is 0.072."
+      - id: b
+        text: "0.0072"
+        explanation: "This is 14.4 * 0.0005, which fits a 99.95 percent objective."
+      - id: c
+        text: "0.72"
+        explanation: "This is far above the ratio the service can reach before it fails nearly every request."
+      - id: d
+        text: "0.005"
+        explanation: "This is the allowed ratio itself, a burn rate of 1."
+    correct_option: a
+    explanation: "The allowed ratio is 0.005, and 14.4 * 0.005 is 0.072."
+
+  - id: ats040-010-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose what to alert on"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      Which alert is best for the on-call engineer?
+    options:
+      - id: a
+        text: "Page when the CPU of any pod is above 70 percent for 1 minute."
+        explanation: "High CPU can be normal and often has no user impact."
+      - id: b
+        text: "Page when the error ratio burns the budget fast, because it reflects what users see."
+        explanation: "Correct. Alerts on symptoms that users feel reduce noise and point to real impact."
+      - id: c
+        text: "Page for every log line with the word error."
+        explanation: "This creates noise and ignores how often the errors occur."
+      - id: d
+        text: "Page when a pod restarts once."
+        explanation: "One restart that the platform handles does not mean users are affected."
+    correct_option: b
+    explanation: "Alerts on symptoms that users feel reduce noise and point to real impact."
+
+  - id: ats040-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain recording rules and the for clause"
+    source_readings:
+      - sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+    prompt: |-
+      A rule has `expr: beacon:http_error_ratio:rate5m > 0.072` and `for: 2m`. What does `for: 2m` do?
+    options:
+      - id: a
+        text: "It evaluates the rule every 2 minutes."
+        explanation: "The evaluation interval is set in the group or globally, not by `for`."
+      - id: b
+        text: "It keeps the alert firing for 2 minutes after the condition ends."
+        explanation: "`for` delays the start of firing and does not extend it."
+      - id: c
+        text: "The alert stays pending until the condition has been true for 2 minutes, then fires."
+        explanation: "Correct. The `for` clause delays the firing state so that short spikes do not page anyone."
+      - id: d
+        text: "It averages the expression over 2 minutes."
+        explanation: "Averaging is done inside the expression with a range selector."
+    correct_option: c
+    explanation: "The `for` clause delays the firing state so that short spikes do not page anyone."
+

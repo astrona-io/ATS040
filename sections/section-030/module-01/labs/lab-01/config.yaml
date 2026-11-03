@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix A Defect Through A Focused Change (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-030-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: issue-report
+      description: "ConfigMap issue-report names the component and the expected path /readyz"
+      type: file
+      source: validation/validate-issue.sh
+      hint: "Create ConfigMap issue-report in starfleet with keys component (scout), observed and expected. The expected value must mention /readyz."
+    - name: readiness-fixed
+      description: "The scout readiness probe calls /readyz"
+      type: file
+      source: validation/validate-readiness.sh
+      hint: "Change readinessProbe.httpGet.path to /readyz."
+    - name: liveness-unchanged
+      description: "The scout liveness probe still calls /healthz and the container keeps its name, image and port"
+      type: file
+      source: validation/validate-focused-change.sh
+      hint: "Keep the change focused. Do not change the liveness probe, the image or the port."
+    - name: change-cause
+      description: "The Deployment records the reason in the annotation kubernetes.io/change-cause"
+      type: file
+      source: validation/validate-change-cause.sh
+      hint: "Annotate the Deployment with kubernetes.io/change-cause mentioning the readiness probe."
+    - name: scout-ready
+      description: "The rollout finished and scout has one ready replica"
+      type: file
+      source: validation/validate-rollout.sh
+      hint: "Wait for the rollout. A wrong path keeps the new pod not ready."
+
+teardown:
+  keepCluster: false

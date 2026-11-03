@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: process-event
+  namespace: starfleet
+spec:
+  backoffLimit: 4
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: worker
+          image: curlimages/curl:8.22.0
+          command:
+            - curl
+            - -fsS
+            - -X
+            - POST
+            - -H
+            - "Idempotency-Key: evt-1001"
+            - http://probe.starfleet.svc.cluster.local/anything
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nightly-report
+  namespace: starfleet
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 300
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  suspend: true
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: report
+              image: curlimages/curl:8.22.0
+              command: ["curl", "-fsS", "http://probe.starfleet.svc.cluster.local/get"]

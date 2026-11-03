@@ -1,0 +1,253 @@
+# Knowledge check. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats040-020
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Cloud Native Architecture"
+questions:
+  - id: ats040-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell readiness from liveness"
+    source_readings:
+      - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+    prompt: |-
+      The readiness probe of one `beacon` pod fails. What does the kubelet do?
+    options:
+      - id: a
+        text: "It restarts the container."
+        explanation: "Restart is the action for a failed liveness probe."
+      - id: b
+        text: "The pod is removed from the Service endpoints and the container is not restarted."
+        explanation: "Correct. A failed readiness probe stops traffic to the pod. Only a failed liveness probe restarts the container."
+      - id: c
+        text: "It deletes the pod and its Deployment."
+        explanation: "The kubelet does not delete Deployments."
+      - id: d
+        text: "It scales the Deployment up by one replica."
+        explanation: "Scaling is done by a controller or autoscaler, not by a probe."
+    correct_option: b
+    explanation: "A failed readiness probe stops traffic to the pod. Only a failed liveness probe restarts the container."
+
+  - id: ats040-020-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Avoid a restart storm"
+    source_readings:
+      - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+    prompt: |-
+      A team points the liveness probe of every pod at a check that calls the database. The database goes down. What happens?
+    options:
+      - id: a
+        text: "Nothing, because liveness only reports."
+        explanation: "A failed liveness probe makes the kubelet restart the container."
+      - id: b
+        text: "The pods are removed from the Service but stay running."
+        explanation: "That is the effect of a failed readiness probe."
+      - id: c
+        text: "Every pod fails liveness and restarts, which adds load while the database is already failing."
+        explanation: "Correct. Use liveness only for states that a restart can repair. A dependency outage is not one."
+      - id: d
+        text: "The Deployment is paused until the database returns."
+        explanation: "A Deployment does not pause because of probes."
+    correct_option: c
+    explanation: "Use liveness only for states that a restart can repair. A dependency outage is not one."
+
+  - id: ats040-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a drain with a disruption budget"
+    source_readings:
+      - sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+    prompt: |-
+      A Deployment has 1 replica and a PodDisruptionBudget with `minAvailable: 1`. An operator runs `kubectl drain` on the node. What happens?
+    options:
+      - id: a
+        text: "The pod is evicted and rescheduled at once."
+        explanation: "That would leave zero available pods and break the budget."
+      - id: b
+        text: "The drain deletes the budget first."
+        explanation: "A drain does not delete budgets."
+      - id: c
+        text: "The budget is ignored for single replicas."
+        explanation: "Budgets apply to any number of replicas."
+      - id: d
+        text: "The drain cannot evict the pod and waits, because eviction would break the budget."
+        explanation: "Correct. With one replica and `minAvailable: 1`, no voluntary eviction is allowed."
+    correct_option: d
+    explanation: "With one replica and `minAvailable: 1`, no voluntary eviction is allowed."
+
+  - id: ats040-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle duplicate delivery"
+    source_readings:
+      - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+    prompt: |-
+      A broker delivers messages at least once. Which design makes the consumer safe?
+    options:
+      - id: a
+        text: "Store an idempotency key for each processed message and skip a key that was already handled."
+        explanation: "Correct. At-least-once delivery means duplicates happen, so the consumer must make a repeated message harmless."
+      - id: b
+        text: "Assume each message arrives exactly once."
+        explanation: "A failure between processing and acknowledgment causes a second delivery."
+      - id: c
+        text: "Disable retries on the producer only."
+        explanation: "Duplicates also come from the broker redelivering after a missing acknowledgment."
+      - id: d
+        text: "Acknowledge each message before processing it."
+        explanation: "This turns duplicates into lost work when the consumer crashes."
+    correct_option: a
+    explanation: "At-least-once delivery means duplicates happen, so the consumer must make a repeated message harmless."
+
+  - id: ats040-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Configure a finite task"
+    source_readings:
+      - sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+    prompt: |-
+      Which `restartPolicy` values can a Job pod use?
+    options:
+      - id: a
+        text: "`Always` or `Never`"
+        explanation: "`Always` is not allowed for a Job."
+      - id: b
+        text: "`Never` or `OnFailure`"
+        explanation: "Correct. A Job runs to completion, so `Always` is rejected by the API server."
+      - id: c
+        text: "Only `Always`"
+        explanation: "This is the policy for long-running Deployments and is rejected for a Job."
+      - id: d
+        text: "Only `Never`"
+        explanation: "`OnFailure` is also valid."
+    correct_option: b
+    explanation: "A Job runs to completion, so `Always` is rejected by the API server."
+
+  - id: ats040-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Match a project to a job"
+    source_readings:
+      - sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+    prompt: |-
+      The team wants the cluster to reconcile its state to manifests stored in Git. Which kind of tool does this?
+    options:
+      - id: a
+        text: "A service mesh, such as Linkerd."
+        explanation: "A mesh handles service-to-service traffic and security."
+      - id: b
+        text: "A container runtime, such as containerd."
+        explanation: "A runtime starts containers on a node."
+      - id: c
+        text: "A GitOps controller, such as Argo CD or Flux."
+        explanation: "Correct. A GitOps controller compares the declared state in Git with the live cluster and corrects the difference."
+      - id: d
+        text: "A metrics system, such as Prometheus."
+        explanation: "A metrics system collects and stores measurements."
+    correct_option: c
+    explanation: "A GitOps controller compares the declared state in Git with the live cluster and corrects the difference."
+
+  - id: ats040-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what a CRD adds"
+    source_readings:
+      - sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
+    prompt: |-
+      What does a CustomResourceDefinition do?
+    options:
+      - id: a
+        text: "It starts a new container runtime on each node."
+        explanation: "Runtimes are not managed through CRDs."
+      - id: b
+        text: "It replaces the scheduler."
+        explanation: "The scheduler is a separate control plane component."
+      - id: c
+        text: "It grants a user permission to create pods."
+        explanation: "Permissions come from RBAC."
+      - id: d
+        text: "It adds a new resource type to the Kubernetes API, which a controller can then act on."
+        explanation: "Correct. A CRD registers a kind with a schema, so the API server stores and validates objects of that kind."
+    correct_option: d
+    explanation: "A CRD registers a kind with a schema, so the API server stores and validates objects of that kind."
+
+  - id: ats040-020-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compute the HPA replica count"
+    source_readings:
+      - sections/section-020/module-03/course-01-horizontal-pod-autoscaler.md
+    prompt: |-
+      A Deployment has 4 replicas. Average CPU utilization is 90 percent and the target is 60 percent. How many replicas does the Horizontal Pod Autoscaler ask for?
+    options:
+      - id: a
+        text: "6"
+        explanation: "Correct. The formula is ceil(current replicas * current metric / target) = ceil(4 * 90 / 60) = 6."
+      - id: b
+        text: "5"
+        explanation: "This does not match the formula. 4 * 90 / 60 is exactly 6."
+      - id: c
+        text: "4"
+        explanation: "The ratio is above 1, so the replica count grows."
+      - id: d
+        text: "8"
+        explanation: "This would need a ratio of 2, which is a utilization of 120 percent."
+    correct_option: a
+    explanation: "The formula is ceil(current replicas * current metric / target) = ceil(4 * 90 / 60) = 6."
+
+  - id: ats040-020-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what utilization is based on"
+    source_readings:
+      - sections/section-020/module-03/course-01-horizontal-pod-autoscaler.md
+    prompt: |-
+      The autoscaler reports `<unknown>` for CPU utilization on a workload. What is a likely cause?
+    options:
+      - id: a
+        text: "The container has no CPU limit."
+        explanation: "The percentage uses the request, not the limit."
+      - id: b
+        text: "The container has no CPU request, so a percentage cannot be computed."
+        explanation: "Correct. Utilization is a percentage of the CPU request. Without a request there is no base value."
+      - id: c
+        text: "The Service has no selector."
+        explanation: "A Service is not used for resource metrics."
+      - id: d
+        text: "The cluster has too many nodes."
+        explanation: "Node count does not remove the base value for the percentage."
+    correct_option: b
+    explanation: "Utilization is a percentage of the CPU request. Without a request there is no base value."
+
+  - id: ats040-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right scaler"
+    source_readings:
+      - sections/section-020/module-03/course-02-vertical-and-cluster-scaling.md
+    prompt: |-
+      Pods stay in the `Pending` state because no node has free CPU. Which component adds nodes?
+    options:
+      - id: a
+        text: "The Horizontal Pod Autoscaler, because it adds replicas."
+        explanation: "More replicas would also stay pending, and it does not add nodes."
+      - id: b
+        text: "The Vertical Pod Autoscaler, because it changes requests."
+        explanation: "It changes pod requests, not the number of nodes."
+      - id: c
+        text: "The Cluster Autoscaler, which adds nodes when pods cannot be scheduled."
+        explanation: "Correct. The Cluster Autoscaler reacts to unschedulable pods. The pod autoscalers change pods, not nodes."
+      - id: d
+        text: "The kubelet, because it manages the node."
+        explanation: "The kubelet does not create nodes."
+    correct_option: c
+    explanation: "The Cluster Autoscaler reacts to unschedulable pods. The pod autoscalers change pods, not nodes."
+

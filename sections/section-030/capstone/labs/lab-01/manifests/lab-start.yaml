@@ -1,0 +1,79 @@
+# Capstone starting state: beacon has a wrong readiness path, and a legacy CronJob manifest waits in a ConfigMap.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: orbit
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beacon
+  namespace: orbit
+  labels:
+    app: beacon
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beacon
+  template:
+    metadata:
+      labels:
+        app: beacon
+    spec:
+      containers:
+        - name: beacon
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beacon
+  namespace: orbit
+spec:
+  selector:
+    app: beacon
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: legacy-cronjob
+  namespace: orbit
+data:
+  cronjob.yaml: |
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: beacon-sweep
+      namespace: orbit
+    spec:
+      schedule: "*/30 * * * *"
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+                - name: sweep
+                  image: curlimages/curl:8.22.0
+                  command: ["curl", "-s", "-m", "5", "http://beacon.orbit.svc.cluster.local/healthz"]

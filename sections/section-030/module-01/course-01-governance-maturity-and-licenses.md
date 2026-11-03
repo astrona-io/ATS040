@@ -5,35 +5,106 @@ exam_objectives:
 ---
 # Governance, Maturity And Licenses
 
-A team plans to depend on a cloud native project and contribute a fix. Governance describes how the project makes decisions, appoints maintainers and handles proposals. A foundation can support shared infrastructure and neutral stewardship, while the project's maintainers and documented processes determine everyday technical decisions.
+A team plans to depend on a cloud native project and to contribute a fix. Before it writes any code, it needs answers to three questions. Who decides what the project does? Under which conditions may the team use and change it? How does a change get accepted? This part answers those questions and ends by recording the evidence for a dependency decision in the cluster.
 
-The Cloud Native Computing Foundation (CNCF) uses Sandbox, Incubating and Graduated categories. They describe project development and evidence assessed through the foundation's process. Sandbox can support early exploration. Incubation requires stronger maturity evidence. Graduation requires broader evidence of adoption, governance and sustainable practice.
+## Governance
 
-These categories are not a performance ranking or a universal security guarantee. A Sandbox project can fit a specialized requirement, while a Graduated project can still be unsuitable for a particular workload. Project status can change, so verify current status when a real selection depends on it rather than memorizing a permanent label.
+**Governance** describes how a project makes decisions, appoints maintainers and handles proposals. A **maintainer** is a person with the right to review and merge changes. Governance documents usually say how a person becomes a maintainer, how disagreements are resolved, how often releases happen and which decisions need wider discussion. A project without a clear decision process can be hard to work with even when its download count is high.
 
-An open source license grants permissions and sets conditions for using, modifying and distributing software. Those conditions can include preserving notices or making particular source available. Different licenses impose different terms. “Open source” does not mean all code can be copied without obligations.
+A foundation adds a second layer. The **Cloud Native Computing Foundation** (CNCF) is a vendor-neutral foundation that hosts projects such as Kubernetes, Prometheus and Envoy. It provides legal ownership of trademarks, shared infrastructure, events and a review process. It does not write the project's code, and it does not decide the daily technical questions. Those stay with the project's maintainers and their documented process.
 
-Contribution rules are related but separate. A project may require a Developer Certificate of Origin (DCO) sign-off or a contributor agreement. It may also require tests, a style guide and a code of conduct. Meeting license obligations does not automatically make a proposed contribution acceptable.
+## Maturity levels
 
-Read the project's published governance and contribution process before making a change. For a dependency decision, examine both legal reuse conditions and technical maintenance evidence. For a contribution, follow the project's acceptance workflow rather than assuming foundation membership creates one identical process for every repository.
+The CNCF groups its projects into three maturity levels:
 
-## Project Governance In Practice
+| Level | What it indicates |
+| --- | --- |
+| Sandbox | An early project that the foundation accepts for exploration and for building a community |
+| Incubating | A project with growing adoption, more than one maintaining organization and documented governance, reviewed against stronger criteria |
+| Graduated | A project with broad adoption, a healthy set of maintainers and a sustainable process, reviewed against the strictest criteria |
 
-A governance document can define who accepts proposals, how maintainers are appointed and which decisions require broader discussion. This matters when a team depends on long-term compatibility or wants to propose a significant change. A popular repository without a clear decision process can be harder to collaborate with than its download count suggests.
+A project moves up through a review of evidence by the foundation's technical committee. The levels describe the project's development and the evidence assessed. They have limits that the exam expects you to know:
 
-Foundation processes supply another layer. Maturity criteria can consider adoption, governance, maintainership, release practices and other evidence. The exact criteria and project status can evolve. Record current evidence when making a dependency decision rather than treating a category as a permanent technical fact.
+- A level is not a performance ranking. A Graduated project can be a poor fit for a narrow requirement.
+- A level is not a security guarantee. Every project, at every level, can have vulnerabilities.
+- A level is a snapshot. Status can change, so check the current status when a real choice depends on it.
+- A level describes the project overall. A single feature of a Graduated project can still be experimental.
 
-A project can become less actively maintained despite having useful software. A feature can be experimental even in a mature project. Evaluate the particular release and feature, not only the project's overall label. Sustainable use includes an upgrade and vulnerability-response plan.
+```mermaid
+flowchart TB
+    S["Sandbox"] -->|"review of evidence"| I["Incubating"]
+    I -->|"review of evidence"| G["Graduated"]
+    S -.->|"archived if inactive"| A["Archived"]
+```
 
-## License And Contribution Obligations
+The diagram shows the normal path of a project through the levels and that a project which becomes inactive can be archived.
 
-License terms can require notices, license text or source availability under defined circumstances. A company's internal use and its distribution of modified software can involve different obligations. The practical lesson is to identify the actual license and intended use, rather than infer unrestricted reuse from public source access.
+## Licenses
 
-A Developer Certificate of Origin sign-off records a contributor's certification about the contribution under the project's process. A contributor agreement can impose another documented requirement. Neither replaces tests, code review or a maintainer's scope decision.
+An **open source license** is a legal text that grants permissions to use, change and share software, and attaches conditions to those permissions. Two broad families exist:
 
-When proposing a change, follow the repository's contribution instructions and maintain an accurate account of the source material used. When selecting a dependency, assess both permission to use it and evidence that the project can support the expected lifecycle. Governance, licensing and technical suitability answer related but separate questions.
+- **Permissive** licenses, such as Apache License 2.0, MIT and BSD, allow use, modification and redistribution with few conditions, mostly keeping the copyright and license notices. Most CNCF projects use Apache License 2.0.
+- **Copyleft** licenses, such as the GNU General Public License, add a condition: when you distribute a modified version, you must distribute its source under the same license.
+
+Open source does not mean that code can be copied without obligations. Internal use and distribution of modified software can have different obligations, so identify the actual license and the intended use. Public source code without a license does not give permission to reuse it at all.
+
+## Contribution rules
+
+A license answers what you may do with the software. A **contribution process** answers what a project needs before it accepts your change. These are separate questions. A project may require:
+
+- A **Developer Certificate of Origin** (DCO) sign-off. The contributor adds a line `Signed-off-by: Name <email>` to each commit, usually with `git commit -s`, certifying that they have the right to submit the change.
+- A contributor license agreement, where the contributor signs a legal document once.
+- Tests that cover the change, a style guide and agreement to a code of conduct.
+
+Meeting a license's conditions does not make a change acceptable, and a DCO sign-off does not replace review. The maintainers decide whether a change fits the project's scope.
+
+## Recording the evidence for a dependency
+
+A dependency decision combines facts from all of the areas above. Record them where the team can find them, for example next to the deployment. A ConfigMap is a simple way to keep structured facts in the cluster.
+
+<!-- astrona:playground:renew -->
+
+Save this as `dependency-record.yaml`:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dependency-record-podinfo
+  namespace: starfleet
+data:
+  project: podinfo
+  license: Apache-2.0
+  license-family: permissive
+  contribution-rules: DCO sign-off, tests
+  maturity-source: checked on the CNCF project page
+  decision: adopt
+  review-date: "2026-11"
+```
+
+Apply it:
+
+```sh
+kubectl apply -f dependency-record.yaml
+```
+
+Then check the result:
+
+```sh
+kubectl -n starfleet get configmap dependency-record-podinfo -o jsonpath='{.data}'
+```
+
+The command prints the keys and values. The record separates the license, the contribution rules and the source of the maturity information, so a later reader can see which question each fact answers and when it was last checked. Treat the values as an example: a real record comes from reading the project's own license file and contribution guide.
+
+## Summing up and what is still open
+
+Governance decides who decides, a maturity level shows how far the foundation's review has gone, a license sets the conditions of use, and a contribution process sets the conditions of acceptance. A sound dependency decision keeps these separate and records its evidence. What remains is the day-to-day path of a change through a project.
 
 ## Common pitfalls
 
 > [!WARNING]
-> Maturity categories do not guarantee suitability or flawless security. License permissions and contribution acceptance requirements are separate matters.
+> - **Reading a maturity level as a quality grade.** It describes development and evidence, not fit or security.
+> - **Treating public source as permission.** The license decides what you may do.
+> - **Assuming a license also covers contribution rules.** A DCO sign-off, tests and review are separate requirements.
+> - **Memorizing a permanent status.** Levels change, so check the current status.
+> - **Assuming every CNCF project works the same way.** Each project has its own governance and contribution guide.

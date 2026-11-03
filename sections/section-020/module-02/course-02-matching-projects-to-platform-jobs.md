@@ -5,35 +5,160 @@ exam_objectives:
 ---
 # Matching Projects To Platform Jobs
 
-The platform needs orchestration, runtime execution, delivery and observability. The Cloud Native Computing Foundation (CNCF) hosts projects in many of these areas. Learn representative tools by the job they perform rather than memorizing an unconnected list of names.
+The CNCF landscape lists hundreds of projects and products. A team that must collect metrics, route traffic or enforce a policy does not need to know all of them. It needs a way to name the job, find the category and compare the options in that category against its own requirements. This part gives that method. It then explains the extension mechanism that most projects use to add their own objects to Kubernetes, and it creates one such object so the mechanism is visible.
 
-Kubernetes orchestrates workloads through its API and controllers. Containerd provides container runtime services. Cilium provides networking and security capabilities, with supported behavior depending on installation and configuration. Envoy is a proxy that can serve as a traffic component within larger systems. These projects occupy different layers even when they appear together in one platform.
+## From a job to a category
 
-Argo CD and Flux support GitOps-style delivery and reconciliation. Helm packages and manages application releases through charts. Prometheus provides metrics monitoring capabilities. OpenTelemetry supplies instrumentation and telemetry collection components. Jaeger supports distributed tracing analysis. A platform can combine several of these rather than requiring one product to replace all the others.
+A **platform job** is a task that every cluster-based platform must do. Each job has a category, and each category has several projects. The table lists representative projects. It is a teaching list, not a ranking, and it does not claim a current maturity level for any project, because levels change.
 
-The right selection depends on requirements. If the need is to retain and query numerical service measurements, start with a metrics system. If the need is to collect traces and move them between systems, instrumentation and collection are relevant. If the need is to reconcile desired Kubernetes resources from versioned sources, evaluate delivery controllers.
+| Platform job | Category | Representative projects |
+| --- | --- | --- |
+| Run containers on a node | Container runtime | containerd, CRI-O |
+| Connect pods and enforce network rules | Networking (CNI) | Cilium, Calico, Flannel |
+| Provide volumes and storage | Storage | Rook, Longhorn, CSI drivers of cloud providers |
+| Collect metrics and alert | Observability | Prometheus |
+| Create standard telemetry | Observability | OpenTelemetry |
+| Trace requests across services | Observability | Jaeger |
+| Collect and forward logs | Observability | Fluent Bit, Fluentd |
+| Deliver changes from Git to the cluster | Continuous delivery | Argo CD, Flux |
+| Encrypt and control traffic between services | Service mesh | Istio, Linkerd |
+| Validate or change objects at admission | Policy | Kyverno, Open Policy Agent Gatekeeper |
+| Package and install applications | Application definition | Helm |
+| Scale on external events | Autoscaling | KEDA |
+| Route external traffic into the cluster | Ingress and API gateway | Envoy-based gateways, Gateway API implementations |
+| Store and serve container images | Registry | Harbor |
+| Exchange events | Messaging and eventing | NATS, Knative Eventing, CloudEvents format |
 
-Project maturity and popularity are evidence about adoption and governance, not a guarantee of workload suitability. Check feature support, integration contracts, resource consumption, licensing and the team's operating skills. A mature project can still lack a required feature or exceed available capacity.
+Read the table as a lookup: when a question describes a job in plain words, name the category first and the projects second. A question about "a tool that scrapes metrics from pods and stores them as time series" describes Prometheus. A question about "a tool that makes a cluster match a Git repository" describes a GitOps controller such as Argo CD or Flux.
 
-Explain each component's input, output and responsibility. A clear tool choice should say which requirement it meets and what other components remain necessary. That reasoning transfers when the ecosystem introduces new projects or changes implementation details.
+## Choosing from requirements and constraints
 
-## Assigning Tools To A Concrete Requirement
+Several projects in one category can do the same job. The choice depends on requirements and constraints, and the order matters.
 
-Suppose the platform needs to run images, restore desired workload state from Git, collect request traces and retain numerical reliability measurements. A container runtime addresses execution. A delivery controller addresses configuration reconciliation. OpenTelemetry components can address instrumentation and collection. A metrics backend such as Prometheus addresses numerical monitoring. Several components are needed because the requirements occupy different boundaries.
+1. State the requirement in one sentence. For example: "we must encrypt all traffic between services without changing application code".
+2. List the constraints: team size, skills the team already has, the cost of running the tool, support expectations, the Kubernetes version and the other tools in the platform.
+3. Check that the candidates satisfy the requirement in full. Remove the ones that do not.
+4. Compare the rest against the constraints. A small team with no service-mesh experience may prefer the smaller tool. A team with strict policy rules may prefer the tool with finer controls.
 
-A proxy such as Envoy can participate in traffic handling, but it does not become a complete delivery or telemetry platform merely because other systems use it. A network implementation such as Cilium can provide important connectivity and policy capabilities, but those must be matched to supported installation and operating requirements. Products can include integrations without losing their primary responsibilities.
+A project's CNCF maturity level shows how the project is governed and adopted. It does not say whether the project fits a requirement. A graduated project can be a poor fit, and a sandbox project can be exactly right for a narrow job. The level is one input.
 
-Ask what enters a component, what it produces and what state it owns. A runtime consumes image references and execution requests. A GitOps controller consumes declared configuration and changes live resources. A collector receives telemetry and exports it. These input-output contracts make role comparisons more meaningful than memorizing names.
+## How projects extend Kubernetes
 
-## Operating Suitability And Community Evidence
+Most of the projects above do more than run next to Kubernetes. They add their own object types to the Kubernetes API, so a user manages them with the same `kubectl` commands and the same access control. Kubernetes supports this through three parts.
 
-Evaluate release stability, compatibility, resource use, documentation and the support model. A highly adopted project can still be too complex for a small team or lack one required capability. A less mature project can be appropriate for experimentation while unsuitable for a critical dependency without additional controls.
+A **CustomResourceDefinition** (CRD) is a Kubernetes object that declares a new resource kind: its API group, its name, its scope and the schema of its fields. After the API server accepts a CRD, it serves the new kind like a built-in kind. A **custom resource** (CR) is an object of that new kind. The API server stores it in etcd, the cluster's key-value database, and returns it on request.
 
-Foundation maturity, contributor activity and governance provide evidence about sustainability. They do not establish performance under the team's exact workload or guarantee absence of defects. Validate real requirements before selection and keep the decision reviewable as the ecosystem evolves.
+A custom resource does nothing by itself. A **controller** is a program that watches objects of one kind and acts until the real state matches the desired state in the object. This loop is called **reconciliation**. A controller plus its custom resources is the **operator pattern**: it encodes operating knowledge, such as how to install, upgrade and back up an application, as software that reads declared objects.
 
-The useful associate-level skill is to match a platform job to a component category and explain its limits. A correct tool choice should identify what remains outside that tool, including data ownership, application correctness and other necessary integrations.
+```mermaid
+flowchart TB
+    U["user"] -->|"kubectl apply"| A["kube-apiserver"]
+    A -->|"validate against schema"| E["etcd"]
+    C["controller"] -->|"watch"| A
+    C -->|"create pods and Services"| A
+```
+
+The diagram shows that the user and the controller both talk only to the API server. The API server validates the object against the schema from the CRD before it stores it, and the controller reacts to the stored object.
+
+A second mechanism, **API aggregation**, lets another server handle a whole API group behind the main API server. Metrics Server uses it to serve the `metrics.k8s.io` API. A CRD is the simpler option and is enough for most projects.
+
+## Creating a custom resource type
+
+Create a small CRD for a `Sensor` kind. The schema requires a `target` string and an `intervalSeconds` integer that is at least 1 and defaults to 30. The CRD name must be the plural resource name, a dot and the group.
+
+<!-- astrona:playground:renew -->
+
+Save this as `crd-sensor.yaml`:
+
+```yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: sensors.fleet.example.com
+spec:
+  group: fleet.example.com
+  scope: Namespaced
+  names:
+    plural: sensors
+    singular: sensor
+    kind: Sensor
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: ["target"]
+              properties:
+                target:
+                  type: string
+                intervalSeconds:
+                  type: integer
+                  minimum: 1
+                  default: 30
+```
+
+Apply it:
+
+```sh
+kubectl apply -f crd-sensor.yaml
+```
+
+Then check the result:
+
+```sh
+kubectl get crd sensors.fleet.example.com
+kubectl api-resources --api-group=fleet.example.com
+```
+
+The new kind now appears in the API. Create one custom resource, leaving out `intervalSeconds` so the API server fills in the default. Save this as `sensor-scout.yaml`:
+
+```yaml
+apiVersion: fleet.example.com/v1
+kind: Sensor
+metadata:
+  name: scout-sensor
+  namespace: starfleet
+spec:
+  target: scout
+```
+
+Apply it:
+
+```sh
+kubectl apply -f sensor-scout.yaml
+```
+
+Then check the result, and try an invalid value with a server-side dry run, which sends the request to the API server and stores nothing:
+
+```sh
+kubectl -n starfleet get sensor scout-sensor -o jsonpath='{.spec}'
+kubectl -n starfleet create --dry-run=server -o yaml -f - <<'YAML'
+apiVersion: fleet.example.com/v1
+kind: Sensor
+metadata:
+  name: bad-sensor
+spec:
+  target: scout
+  intervalSeconds: 0
+YAML
+```
+
+The first command shows `intervalSeconds` set to 30 by the default. The second command fails: the API server compares the object with the schema and rejects the value 0 because the schema says the minimum is 1. No controller is installed, so the `Sensor` object only stores data. A controller for this kind would be the next step.
+
+## Summing up and what is still open
+
+You can now match a platform job to a category and name representative projects, choose among them from requirements and constraints, and explain how a project adds objects to the Kubernetes API with a CRD, a schema and a controller. The open question is what the cluster does with the stored objects, which is the work of the controller that a project ships.
 
 ## Common pitfalls
 
 > [!WARNING]
-> A collector, metrics backend, proxy and delivery controller are different components. Foundation membership or project maturity does not guarantee that a tool fits every requirement.
+> - **Choosing by maturity level alone.** The level describes governance and adoption, not fit for a requirement.
+> - **Expecting a custom resource to act.** Without a controller, the object is only stored.
+> - **Wrong CRD name.** `metadata.name` must be `<plural>.<group>`, or the API server rejects the CRD.
+> - **A schema that is not structural.** Every field needs a `type`, or the API server rejects the CRD.
+> - **Treating the table as a ranking.** It lists examples of jobs, not the best tool.

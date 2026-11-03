@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Architecture Capstone (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-capstone-020
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: replicas
+      description: "Deployment beacon runs at least 3 ready replicas"
+      type: file
+      source: validation/validate-replicas.sh
+      hint: "Raise spec.replicas to 3 or more and wait for the rollout."
+    - name: probes
+      description: "The container has a readiness probe on /readyz and a liveness probe on /healthz"
+      type: file
+      source: validation/validate-probes.sh
+      hint: "Use two different paths. Readiness removes traffic, liveness restarts."
+    - name: requests
+      description: "The container requests CPU and memory and has a memory limit"
+      type: file
+      source: validation/validate-requests.sh
+      hint: "Set resources.requests.cpu, resources.requests.memory and resources.limits.memory."
+    - name: disruption-budget
+      description: "A policy/v1 PodDisruptionBudget keeps at least 2 beacon pods available"
+      type: file
+      source: validation/validate-pdb.sh
+      hint: "Use minAvailable: 2 and select app=beacon."
+    - name: settings
+      description: "beacon reads ConfigMap beacon-settings through envFrom"
+      type: file
+      source: validation/validate-settings.sh
+      hint: "Use envFrom with configMapRef, not a copy of the value."
+    - name: autoscaler
+      description: "An autoscaling/v2 HorizontalPodAutoscaler scales beacon between 3 and 6 on 70 percent CPU"
+      type: file
+      source: validation/validate-hpa.sh
+      hint: "Target the Deployment and use a Resource metric of type Utilization."
+
+teardown:
+  keepCluster: false

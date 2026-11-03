@@ -1,5 +1,5 @@
 version: 1
-approval: KCNA-LESSON-PLAN.md approved; reading-only correction 2026-10-10
+approval: KCNA-LESSON-PLAN.md approved; hands-on scope (playgrounds, labs, capstones, quiz.yaml) approved by the maintainer after the reading-only correction
 course:
   id: ATS040
   certification:
@@ -13,9 +13,9 @@ course:
     - Cloud Native Ecosystem and Principles
     - Cloud Native Community and Collaboration
 defaults:
-  playground: false
-  module_lab: false
-  capstone: false
+  playground: true
+  module_lab: true
+  capstone: true
   section_quiz: true
   final_quiz: true
 sections:
@@ -34,10 +34,11 @@ sections:
     - Metrics, Logs And Traces
     - Instrumentation And Telemetry Pipelines
     - Service Objectives, Budgets And Alerts
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
+    labs: 1
     diagrams: []
-  capstone: false
+  capstone: true
   section_quiz: true
 - id: section-020
   title: Cloud Native Ecosystem and Principles
@@ -53,8 +54,9 @@ sections:
     outline:
     - Boundaries, Resilience And Elasticity
     - Serverless And Event-Driven Workloads
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
+    labs: 2
     diagrams: []
   - id: module-02
     title: Cloud Native Ecosystem
@@ -66,10 +68,25 @@ sections:
     outline:
     - Standards And Implementation Boundaries
     - Matching Projects To Platform Jobs
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
+    labs: 1
     diagrams: []
-  capstone: false
+  - id: module-03
+    title: Autoscaling
+    objectives:
+    - Explain how the Horizontal Pod Autoscaler computes a replica count.
+    - Distinguish horizontal, vertical and cluster scaling.
+    - Explain event-driven scaling and scaling behavior.
+    outline:
+    - Horizontal Pod Autoscaler
+    - Vertical And Cluster Scaling
+    - Event-Driven Scaling And Behavior
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  capstone: true
   section_quiz: true
 - id: section-030
   title: Cloud Native Community and Collaboration
@@ -85,9 +102,25 @@ sections:
     outline:
     - Governance, Maturity And Licenses
     - Issues, Reviews And Working Groups
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
+    labs: 1
     diagrams: []
-  capstone: false
+  - id: module-02
+    title: API Maturity And Deprecation
+    objectives:
+    - Describe alpha, beta and stable API levels and feature gates.
+    - Apply the deprecation policy windows.
+    - Find clients that use deprecated versions.
+    - Migrate manifests and check them with a dry run and a diff.
+    outline:
+    - API Maturity Levels And Feature Gates
+    - Deprecation Policy And Finding Deprecated Use
+    - Migrating Manifests To Current Versions
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  capstone: true
   section_quiz: true
-assessment_format: YAML question banks, schema version 1; indexed in assessments/index.yaml
+assessment_format: quiz.yaml per section and sections/final-domain-quiz.yaml (ATS021 format); earlier YAML banks kept in assessments/

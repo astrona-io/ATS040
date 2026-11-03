@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Make A Workload Autoscale (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-020-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+    addons:
+      metricsServer: true
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: scout-has-requests
+      description: "Container scout requests 100m CPU and 32Mi memory"
+      type: file
+      source: validation/validate-requests.sh
+      hint: "Set resources.requests cpu 100m and memory 32Mi on the scout container."
+    - name: hpa-spec
+      description: "HPA scout targets Deployment scout with 2 to 5 replicas and 60 percent CPU utilization"
+      type: file
+      source: validation/validate-hpa.sh
+      hint: "Use autoscaling/v2, scaleTargetRef Deployment scout, minReplicas 2, maxReplicas 5 and a Resource cpu Utilization target of 60."
+    - name: hpa-behavior
+      description: "Scale-down window is 120 seconds and scale-up is limited to 2 pods per 30 seconds"
+      type: file
+      source: validation/validate-behavior.sh
+      hint: "Set behavior.scaleDown.stabilizationWindowSeconds 120 and a scaleUp Pods policy with value 2 and periodSeconds 30."
+    - name: hpa-active
+      description: "The HPA can compute the metric (ScalingActive is True)"
+      type: file
+      source: validation/validate-active.sh
+      hint: "ScalingActive stays False until the scout pods have a CPU request and Metrics Server reports their usage. Wait a minute after the rollout."
+    - name: scout-scaled-to-minimum
+      description: "scout has at least 2 ready replicas"
+      type: file
+      source: validation/validate-replicas.sh
+      hint: "The HPA raises the Deployment to minReplicas once it is active."
+
+teardown:
+  keepCluster: false

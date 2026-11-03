@@ -1,0 +1,7 @@
+apiVersion: fleet.example.com/v1
+kind: Sensor
+metadata:
+  name: scout-sensor
+  namespace: starfleet
+spec:
+  target: scout

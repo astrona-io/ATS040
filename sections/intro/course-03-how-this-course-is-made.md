@@ -1,8 +1,8 @@
 # How This Course Is Made
 
-Authors map each section to a published KCNA objective and check technical explanations against primary documentation. They review examples for accuracy, diagrams for clear component responsibilities, and practice questions for one supported answer. No command output is invented, and this reading-only draft makes no claim that a laboratory was executed.
+Authors map each section to a published KCNA objective and check technical explanations against primary documentation. They review examples for accuracy, diagrams for clear component responsibilities, and practice questions for one supported answer. No command output is invented. The playgrounds, labs and capstones are written and statically checked: the configuration validates, the scripts parse and the YAML loads. They have not been run yet, and each lab says so in its README.
 
-Structural checks verify the manifest, reading paths, section introductions and the final summary of every module. Technical review remains necessary before publication. An exam objective can change; maintainers record the date used for the curriculum map and revise the material when needed.
+Structural checks verify the manifest, reading paths, section introductions and the final summary of every module. Technical review and a full run of every lab remain necessary before publication. An exam objective can change; maintainers record the date used for the curriculum map and revise the material when needed.
 
 The [contributors](https://github.com/astrona-io/ATS040/graphs/contributors) maintain this course. To [report a mistake](https://github.com/astrona-io/ATS040/issues), include the page title, the incorrect statement and an explanation of the expected behavior. Suggest a focused change so reviewers can check it against the objective.
 

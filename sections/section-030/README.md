@@ -5,9 +5,9 @@ exam_objectives:
 ---
 # Cloud Native Community and Collaboration
 
-This section teaches community and collaboration. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario.
+This section teaches community and collaboration; API maturity and deprecation. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario, and you apply them on a kind cluster.
 
-You will work through Community And Collaboration. Each module introduces its goals, teaches the concepts through examples, and closes with a summary. An original YAML question bank is prepared for the end of the section, with answer explanations for future quiz integration.
+You will work through Community And Collaboration, API Maturity And Deprecation. Each module introduces its goals, teaches the concepts through examples, offers a playground for free practice and a graded lab, and closes with a summary. The section ends with an integration capstone and a knowledge check.
 
 ## Learning Outcomes
 
@@ -15,3 +15,8 @@ You will work through Community And Collaboration. Each module introduces its go
 - Distinguish licensing permission from contribution acceptance.
 - Describe an issue, pull request and review workflow.
 - Identify a suitable SIG or working group for a focused contribution.
+- Fix a defect as a focused change and record its cause.
+- Describe alpha, beta and stable API levels and feature gates.
+- Apply the deprecation policy windows to a version that is going away.
+- Find clients that still use deprecated versions.
+- Migrate manifests to current versions and check them with a server-side dry run and a diff.

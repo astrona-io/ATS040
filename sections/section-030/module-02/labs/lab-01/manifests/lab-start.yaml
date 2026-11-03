@@ -1,0 +1,105 @@
+# Starting state: scout with a CPU request, and legacy manifests stored in the ConfigMap legacy-manifests.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: starfleet
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: starfleet
+  labels:
+    app: scout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scout
+  namespace: starfleet
+spec:
+  selector:
+    app: scout
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: legacy-manifests
+  namespace: starfleet
+data:
+  cronjob.yaml: |
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: report-sweep
+      namespace: starfleet
+    spec:
+      schedule: "*/30 * * * *"
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+                - name: sweep
+                  image: curlimages/curl:8.22.0
+                  command: ["curl", "-fsS", "http://scout.starfleet.svc.cluster.local/healthz"]
+  hpa.yaml: |
+    apiVersion: autoscaling/v2beta2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: scout
+      namespace: starfleet
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: scout
+      minReplicas: 1
+      maxReplicas: 3
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+              type: Utilization
+              averageUtilization: 70
+  pdb.yaml: |
+    apiVersion: policy/v1beta1
+    kind: PodDisruptionBudget
+    metadata:
+      name: scout-pdb
+      namespace: starfleet
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          app: scout

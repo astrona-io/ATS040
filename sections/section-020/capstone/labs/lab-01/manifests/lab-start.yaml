@@ -1,0 +1,50 @@
+# Capstone starting state: beacon runs as one bare replica with no probes, no requests and no settings.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: orbit
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beacon
+  namespace: orbit
+  labels:
+    app: beacon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beacon
+  template:
+    metadata:
+      labels:
+        app: beacon
+    spec:
+      containers:
+        - name: beacon
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beacon
+  namespace: orbit
+spec:
+  selector:
+    app: beacon
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beacon-settings
+  namespace: orbit
+data:
+  PODINFO_UI_MESSAGE: "beacon is replaceable"

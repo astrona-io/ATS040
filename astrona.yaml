@@ -1,9 +1,31 @@
-# Reading-only course. YAML assessments are registered separately in assessments/index.yaml.
+# Course manifest for ATS040 - Cloud Native Architecture (Kubernetes and Cloud Native Associate).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's wrap-up page
+# comes last. The section capstone closes the section, followed by the
+# section quiz. Playgrounds are not listed: the landing page's playground
+# marker shows them. solution.md is never listed.
+#
+# The older question banks under sections/*/questions.yaml and assessments/
+# are kept. They are registered in assessments/index.yaml.
+#
+# Every `path:` is relative to this file.
+
 training:
   id: ATS040
-  title: 'KCNA: Cloud Native Architecture'
-  description: Concept lessons, diagrams and original scenario assessments covering every published objective
-    in this KCNA domain. No labs or playgrounds.
+  title: "KCNA: Cloud Native Architecture"
+  description: >
+    Training material covering the Kubernetes and Cloud Native Associate
+    (KCNA) Cloud Native Architecture domain: observability with metrics,
+    logs, traces and service objectives; cloud native design, the ecosystem
+    and autoscaling; and community governance with the Kubernetes API
+    lifecycle. Each module pairs a layered reader with an ungraded
+    hands-on playground and a graded lab. Each section closes with an
+    integration capstone and a knowledge check. Labs run on kind with
+    Kubernetes 1.35.
+
   certification:
     name: Kubernetes and Cloud Native Associate
     code: KCNA
@@ -11,98 +33,370 @@ training:
     domain: Cloud Native Architecture
     weight: 12
     competencies:
-    - Observability
-    - Cloud Native Ecosystem and Principles
-    - Cloud Native Community and Collaboration
+      - "Observability"
+      - "Cloud Native Ecosystem and Principles"
+      - "Cloud Native Community and Collaboration"
+
 modules:
-- id: module-intro
-  title: Introduction
-  description: Audience, learning approach, reading requirements and contribution process.
-  content:
-  - type: reading
-    title: Introduction
-    path: sections/intro/README.md
-  - type: reading
-    title: Welcome To The Course
-    path: sections/intro/course-01-welcome.md
-  - type: reading
-    title: Get Your Machine Ready
-    path: sections/intro/course-02-get-your-machine-ready.md
-  - type: reading
-    title: How This Course Is Made
-    path: sections/intro/course-03-how-this-course-is-made.md
-- id: module-010
-  title: Observability
-  description: Concept lessons and scenario reasoning for Observability.
-  maturity: alpha
-  content:
-  - type: reading
-    title: 'Observability: Introduction'
-    path: sections/section-010/README.md
-  - type: reading
-    title: Observability And Reliability
-    path: sections/section-010/module-01/course.md
-  - type: reading
-    title: Metrics, Logs And Traces
-    path: sections/section-010/module-01/course-01-metrics-logs-and-traces.md
-  - type: reading
-    title: Instrumentation And Telemetry Pipelines
-    path: sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
-  - type: reading
-    title: Service Objectives, Budgets And Alerts
-    path: sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
-  - type: reading
-    title: Summary
-    path: sections/section-010/module-01/course-04-summary.md
-- id: module-020
-  title: Cloud Native Ecosystem and Principles
-  description: Concept lessons and scenario reasoning for Cloud Native Ecosystem and Principles.
-  maturity: alpha
-  content:
-  - type: reading
-    title: 'Cloud Native Ecosystem and Principles: Introduction'
-    path: sections/section-020/README.md
-  - type: reading
-    title: Cloud Native Design
-    path: sections/section-020/module-01/course.md
-  - type: reading
-    title: Boundaries, Resilience And Elasticity
-    path: sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
-  - type: reading
-    title: Serverless And Event-Driven Workloads
-    path: sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
-  - type: reading
-    title: Summary
-    path: sections/section-020/module-01/course-03-summary.md
-  - type: reading
-    title: Cloud Native Ecosystem
-    path: sections/section-020/module-02/course.md
-  - type: reading
-    title: Standards And Implementation Boundaries
-    path: sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
-  - type: reading
-    title: Matching Projects To Platform Jobs
-    path: sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
-  - type: reading
-    title: Summary
-    path: sections/section-020/module-02/course-03-summary.md
-- id: module-030
-  title: Cloud Native Community and Collaboration
-  description: Concept lessons and scenario reasoning for Cloud Native Community and Collaboration.
-  maturity: alpha
-  content:
-  - type: reading
-    title: 'Cloud Native Community and Collaboration: Introduction'
-    path: sections/section-030/README.md
-  - type: reading
-    title: Community And Collaboration
-    path: sections/section-030/module-01/course.md
-  - type: reading
-    title: Governance, Maturity And Licenses
-    path: sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
-  - type: reading
-    title: Issues, Reviews And Working Groups
-    path: sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
-  - type: reading
-    title: Summary
-    path: sections/section-030/module-01/course-03-summary.md
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, and how
+      the content is written and checked.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Observability"
+    description: >
+      Metrics, logs and traces, how telemetry is produced and moved, and how
+      service objectives, error budgets and burn-rate alerts turn telemetry
+      into decisions. Hands-on with Prometheus on a kind cluster.
+
+    content:
+      - type: reading
+        title: "Observability: Introduction"
+        path: sections/section-010/README.md
+      - type: reading
+        title: "Observability And Reliability"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Metrics, Logs And Traces"
+        path: sections/section-010/module-01/course-01-metrics-logs-and-traces.md
+      - type: reading
+        title: "Instrumentation And Telemetry Pipelines"
+        path: sections/section-010/module-01/course-02-instrumentation-and-telemetry-pipelines.md
+      - type: reading
+        title: "Service Objectives, Budgets And Alerts"
+        path: sections/section-010/module-01/course-03-service-objectives-budgets-and-alerts.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Scrape And Alert On The scout Error Budget Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: observability
+        task_kind: build
+        tags: [prometheus, scrape-config, recording-rule, alert-rule, slo, error-budget, burn-rate]
+        learning_goals:
+          - Add a Prometheus scrape job for a workload and confirm the target is up
+          - Record the 5xx error ratio of the workload as a recording rule
+          - Write a burn-rate alert for a 99.5 percent objective and watch it fire
+        resources:
+          - name: "Prometheus configuration"
+            url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+          - name: "Prometheus alerting rules"
+            url: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+          - name: "Prometheus recording rules"
+            url: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: "Question"
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Observability Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 30m
+        topic: observability
+        task_kind: build
+        tags: [prometheus, scrape-config, recording-rule, burn-rate, alert-rule, slo, error-budget]
+        learning_goals:
+          - Scrape a workload every 10 seconds with an extra target label
+          - Record the error ratio and alert on a 14.4 times burn of a 99.5 percent objective
+          - Alert when the target is down and record the objective and error budget in a ConfigMap
+        resources:
+          - name: "Prometheus configuration"
+            url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+          - name: "Prometheus alerting rules"
+            url: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+      - type: quiz
+        title: "Knowledge Check: Observability"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
+
+  - id: module-020
+    title: "Cloud Native Ecosystem and Principles"
+    description: >
+      Design rules for replaceable workloads, finite and event-driven work,
+      the CNCF ecosystem and how its projects fit platform jobs, and
+      autoscaling at the pod and node level.
+
+    content:
+      - type: reading
+        title: "Cloud Native Ecosystem and Principles: Introduction"
+        path: sections/section-020/README.md
+      - type: reading
+        title: "Cloud Native Design"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Boundaries, Resilience And Elasticity"
+        path: sections/section-020/module-01/course-01-boundaries-resilience-and-elasticity.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Build A Resilient Replaceable Workload Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: architecture
+        task_kind: build
+        tags: [deployment, replicas, readiness-probe, liveness-probe, resource-requests, poddisruptionbudget, configmap]
+        learning_goals:
+          - Run three replicas with separate readiness and liveness probes
+          - Set resource requests and read configuration from a ConfigMap
+          - Protect the workload from drains with a PodDisruptionBudget
+        resources:
+          - name: "Pod lifecycle and probes"
+            url: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+          - name: "Specifying a disruption budget"
+            url: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+      - type: reading
+        title: "Serverless And Event-Driven Workloads"
+        path: sections/section-020/module-01/course-02-serverless-and-event-driven-workloads.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Run Retried Work With A Job And A CronJob Lab"
+        path: sections/section-020/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: architecture
+        task_kind: build
+        tags: [job, cronjob, backoff-limit, restart-policy, idempotency]
+        learning_goals:
+          - Bound the retries of a Job and choose a valid restart policy
+          - Send an idempotency key so repeated work has one effect
+          - Set a concurrency policy on a CronJob
+        resources:
+          - name: "Jobs"
+            url: https://kubernetes.io/docs/concepts/workloads/controllers/job/
+          - name: "CronJob"
+            url: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-01/course-03-summary.md
+
+      - type: reading
+        title: "Cloud Native Ecosystem"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Standards And Implementation Boundaries"
+        path: sections/section-020/module-02/course-01-standards-and-implementation-boundaries.md
+      - type: reading
+        title: "Matching Projects To Platform Jobs"
+        path: sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Extend Kubernetes With A Custom Resource Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: ecosystem
+        task_kind: build
+        tags: [crd, customresourcedefinition, openapi-schema, extension-api]
+        learning_goals:
+          - Match four platform jobs to the project type that does them
+          - Define a CustomResourceDefinition with a validation schema
+          - Create a valid custom resource and see an invalid one rejected
+        resources:
+          - name: "Custom resources"
+            url: https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/
+          - name: "Extend the API with CRDs"
+            url: https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-02/course-03-summary.md
+
+      - type: reading
+        title: "Autoscaling"
+        path: sections/section-020/module-03/course.md
+      - type: reading
+        title: "Horizontal Pod Autoscaler"
+        path: sections/section-020/module-03/course-01-horizontal-pod-autoscaler.md
+      - type: reading
+        title: "Vertical And Cluster Scaling"
+        path: sections/section-020/module-03/course-02-vertical-and-cluster-scaling.md
+      - type: reading
+        title: "Event-Driven Scaling And Behavior"
+        path: sections/section-020/module-03/course-03-event-driven-scaling-and-behavior.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Make A Workload Autoscale Lab"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: autoscaling
+        task_kind: build
+        tags: [hpa, autoscaling-v2, resource-requests, metrics-server, scaling-behavior]
+        learning_goals:
+          - Add CPU and memory requests that give the autoscaler a base value
+          - Create an autoscaling/v2 HorizontalPodAutoscaler with bounds and a target
+          - Tune scale-up and scale-down behavior and confirm the autoscaler is active
+        resources:
+          - name: "Horizontal Pod Autoscaling"
+            url: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+          - name: "HPA walkthrough"
+            url: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-03/course-04-summary.md
+
+      - type: reading
+        title: "Question"
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Architecture Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 30m
+        topic: architecture
+        task_kind: build
+        tags: [deployment, readiness-probe, liveness-probe, resource-requests, poddisruptionbudget, configmap, hpa]
+        learning_goals:
+          - Make one bare workload replaceable with replicas, probes, requests and external settings
+          - Keep at least two pods available during voluntary disruptions
+          - Scale the workload between three and six replicas on CPU utilization
+        resources:
+          - name: "Horizontal Pod Autoscaling"
+            url: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+          - name: "Specifying a disruption budget"
+            url: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+      - type: quiz
+        title: "Knowledge Check: Cloud Native Ecosystem and Principles"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
+
+  - id: module-030
+    title: "Cloud Native Community and Collaboration"
+    description: >
+      How the CNCF and Kubernetes projects are governed, how issues and
+      changes move through review, and how API maturity levels and the
+      deprecation policy affect the manifests you run.
+
+    content:
+      - type: reading
+        title: "Cloud Native Community and Collaboration: Introduction"
+        path: sections/section-030/README.md
+      - type: reading
+        title: "Community And Collaboration"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "Governance, Maturity And Licenses"
+        path: sections/section-030/module-01/course-01-governance-maturity-and-licenses.md
+      - type: reading
+        title: "Issues, Reviews And Working Groups"
+        path: sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Fix A Defect Through A Focused Change Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: community
+        task_kind: troubleshoot
+        tags: [issue-report, readiness-probe, change-cause, rollout, kubectl-diff]
+        learning_goals:
+          - Write an issue report that names the symptom, the cause and the owning group
+          - Fix a wrong readiness path as a focused change and roll it out
+          - Record the reason for the change with the change-cause annotation
+        resources:
+          - name: "Kubernetes community"
+            url: https://github.com/kubernetes/community
+          - name: "Deployments"
+            url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-01/course-03-summary.md
+
+      - type: reading
+        title: "API Maturity And Deprecation"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "API Maturity Levels And Feature Gates"
+        path: sections/section-030/module-02/course-01-api-maturity-levels-and-feature-gates.md
+      - type: reading
+        title: "Deprecation Policy And Finding Deprecated Use"
+        path: sections/section-030/module-02/course-02-deprecation-policy-and-finding-deprecated-use.md
+      - type: reading
+        title: "Migrating Manifests To Current Versions"
+        path: sections/section-030/module-02/course-03-migrating-manifests-to-current-versions.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Migrate Removed API Versions Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: api-lifecycle
+        task_kind: migration
+        tags: [api-deprecation, api-versions, cronjob, hpa, poddisruptionbudget, dry-run]
+        learning_goals:
+          - Migrate a CronJob, a HorizontalPodAutoscaler and a PodDisruptionBudget to the served versions
+          - Check each migrated manifest with a server-side dry run
+          - Record the migration in a ConfigMap and keep the originals
+        resources:
+          - name: "Deprecated API migration guide"
+            url: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
+          - name: "Kubernetes deprecation policy"
+            url: https://kubernetes.io/docs/reference/using-api/deprecation-policy/
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-02/course-04-summary.md
+
+      - type: reading
+        title: "Question"
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Community And API Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 30m
+        topic: api-lifecycle
+        task_kind: troubleshoot
+        tags: [readiness-probe, change-cause, cronjob, api-deprecation, sig, issue-report]
+        learning_goals:
+          - Fix a failing readiness probe and record the cause of the change
+          - Bring a CronJob back through the API version the cluster serves
+          - Document the replaced version, its beta support window and the owning group
+        resources:
+          - name: "Kubernetes deprecation policy"
+            url: https://kubernetes.io/docs/reference/using-api/deprecation-policy/
+          - name: "Deprecated API migration guide"
+            url: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
+      - type: quiz
+        title: "Knowledge Check: Cloud Native Community and Collaboration"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Knowledge Check: Cloud Native Architecture"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

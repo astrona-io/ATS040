@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    rule_files:
+      - /etc/prometheus/rules/*.yml
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets: ["localhost:9090"]
+      - job_name: beacon
+        scrape_interval: 10s
+        static_configs:
+          - targets: ["beacon.orbit.svc.cluster.local:9898"]
+            labels:
+              team: orbit
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+data:
+  rules.yml: |
+    groups:
+      - name: beacon-slo
+        rules:
+          - record: beacon:http_error_ratio:rate5m
+            expr: sum(rate(http_requests_total{job="beacon",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="beacon"}[5m]))
+          - alert: BeaconErrorBudgetBurn
+            expr: beacon:http_error_ratio:rate5m > 14.4 * 0.005
+            for: 2m
+            labels:
+              severity: page
+            annotations:
+              summary: beacon is spending its 99.5% error budget 14.4 times too fast
+          - alert: BeaconDown
+            expr: up{job="beacon"} == 0
+            for: 1m
+            labels:
+              severity: page
+            annotations:
+              summary: beacon cannot be scraped
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beacon-slo
+  namespace: orbit
+data:
+  objective: "99.5"
+  allowed-error-ratio: "0.005"
+  error-budget-minutes-30d: "216"

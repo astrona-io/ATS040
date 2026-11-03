@@ -5,35 +5,91 @@ exam_objectives:
 ---
 # Metrics, Logs And Traces
 
-Users report that `scout` became slow after a release. Observability is the ability to reason about a system's internal behavior using evidence it produces. Telemetry is recorded information about that behavior. Different telemetry forms answer different questions, so one dashboard is rarely sufficient for every diagnosis.
+A user says that `scout` is slow. The operator needs to know how many users are affected, which request is slow and why it is slow. One kind of data rarely answers all three questions. Metrics, logs and traces are three signal types, and each one is built for a different question.
 
-A metric is a numerical measurement recorded over time. Request count, latency distributions and memory use can show trends and aggregate behavior. A counter accumulates events; a gauge measures a value that can rise or fall. Histograms capture observations in buckets to support distribution analysis. An average can hide a slow minority of requests, so latency percentiles and distributions can matter.
+This chapter looks at each signal in turn: what it records, which properties decide whether it is useful, and where it fails. It ends with the property that limits all three, which is cost. Every extra label, field and span costs storage and money.
 
-A log records an event with contextual data. It can show a specific error, input category or transition. Structured fields such as timestamps and request identifiers help connect related records without relying on free-text searches. Logs need retention and access controls because they can contain sensitive information.
+## Metrics: numbers over time
 
-A trace records the timed operations of a request across components. A span describes one operation and its relationship to other spans. Trace context propagated between services lets a system connect downstream work to the original request. Sampling selects which traces are retained, so absence of a trace is not proof that no request occurred.
+A metric is a numerical measurement recorded over time. A single data point has a name, a set of labels (key and value pairs that identify what was measured) and a value. A series is the sequence of values for one name and one label set. Metrics are small and cheap, so a system can record them continuously and answer "how many" and "how often" over any time range.
 
-For widespread latency growth, metrics can identify when and how often it happens. A trace can show where a sampled slow request spent time. Logs can explain the associated timeout or validation error. These forms complement one another rather than forming an order where one replaces all the others.
+Prometheus uses four metric types. A counter only increases while the process runs, and resets to zero when the process restarts. A gauge is a value that rises and falls, such as the number of requests in progress. A histogram counts observations into buckets with fixed upper bounds, so a query can estimate percentiles. A summary calculates percentiles inside the application and exposes them directly.
 
-Compare telemetry with the user's symptom. A low CPU graph does not prove that an external database is fast. Evidence should cover the operations and dependencies relevant to the observed behavior.
+The type decides which calculations are valid. The current value of a counter is not useful, because it depends on when the process started. Instead, a query takes the rate of increase over a time window. Prometheus provides `rate()` for this, and it also handles counter resets. A gauge is read as it is, and a histogram is queried with `histogram_quantile()`.
 
-## Choosing A Signal From A Question
+The `scout` application exposes its metrics over HTTP. Run this to read them from the `shuttle` pod:
 
-A request success metric can show that failures rose from a small fraction to a large fraction after a release. It does not necessarily identify one failed request or its internal steps. A log can show a database timeout for a particular request. A trace can show that most of its duration was spent in that database call. The combined evidence connects population impact with a concrete mechanism.
+<!-- astrona:playground:renew -->
 
-Metric aggregation needs units and a defined population. A latency measurement in seconds should not be compared directly with another in milliseconds. A rate of failed requests needs both the failure definition and the total eligible requests. Removing difficult requests from the denominator can improve a number while making it less representative of users.
+```sh
+kubectl -n starfleet exec deploy/shuttle -- curl -s http://scout.starfleet.svc.cluster.local:9898/metrics | grep -E '^# TYPE (http_requests_total|http_request_duration_seconds)'
+```
 
-A counter normally increases during one process lifetime and can reset when that process restarts. A query computing a rate should account for that behavior. A gauge can rise or fall, such as queue depth. A histogram groups observations by thresholds and can support distribution analysis. The chosen type determines which calculations are meaningful.
+You should see something like:
 
-## Correlation And Missing Evidence
+```text
+# TYPE http_requests_total counter
+# TYPE http_request_duration_seconds histogram
+```
 
-Request context helps connect events between processes. A trace's spans represent operations with timing and parent relationships; they are not simply log lines renamed. Missing context propagation can fragment one user request into unrelated traces. Sampling and retention can also remove evidence that once existed.
+`http_requests_total` is a counter with a `status` label, one series for each HTTP status code that `scout` has returned. `http_request_duration_seconds` is a histogram with the labels `method`, `path` and `status`. The first metric answers "how many requests failed", and the second answers "how long did requests take".
 
-A log stream can be incomplete because a process buffered output, a collector failed or retention expired. A trace can be absent because the request was not sampled. A metric can be stale because scraping stopped. Distinguish actual quiet behavior from a failed observation path before concluding that no work or error occurred.
+## Logs: events with context
 
-Use signals to answer specific questions: how many users were affected, where time was spent and which error occurred. Then connect those observations through timestamps and context. Collecting all possible data without a question can increase cost and sensitive-data exposure without improving diagnosis.
+A log is a record of one event with its context. A log line can say that one request to `/status/500` failed at a specific time. A metric cannot say that, because it only keeps the count. Logs explain individual events, but they are larger than metrics, so storing and searching them costs more.
+
+A structured log writes each event as fields, usually JSON, instead of free text. Fields such as `level`, `ts` and `msg` let a tool filter and count events without parsing sentences. A request identifier field lets an operator find every log line that belongs to one request. Podinfo writes structured JSON log lines.
+
+Read the recent `scout` logs:
+
+```sh
+kubectl -n starfleet logs deploy/scout --tail=5
+```
+
+Each line is one JSON object. The container writes it to standard output, the container runtime stores it on the node, and `kubectl logs` reads it back. The runtime keeps only a limited amount, so a longer retention needs a collector that ships the lines to a log store. Logs can also contain personal data or secrets, so they need access controls and a retention limit.
+
+## Traces: one request across services
+
+A trace records the path of one request through many services. A span is one timed operation inside the trace, for example one HTTP call or one database query. Each span stores a start time, a duration, attributes and the identifier of its parent span. The spans of one trace share a trace identifier, and together they form a tree.
+
+The following diagram shows a trace for one request that passes through two services.
+
+```mermaid
+flowchart TB
+  A["Span: GET /orders (shuttle)"]
+  B["Span: call scout (shuttle)"]
+  C["Span: handle request (scout)"]
+  D["Span: query database (scout)"]
+  A -->|"parent"| B
+  B -->|"traceparent header"| C
+  C -->|"parent"| D
+```
+
+The diagram shows four spans with one trace identifier. The arrow between the two services is context propagation: the caller adds a `traceparent` HTTP header that carries the trace identifier and its own span identifier, and the receiving service reads it and creates a child span. If one service does not forward the header, the trace breaks into two unrelated traces.
+
+Tracing every request is expensive, so systems use sampling. Head sampling decides at the start of a request whether to record the trace, for example one request in a hundred. Tail sampling decides after the trace is complete, so it can keep every slow or failed trace. In both cases a missing trace does not prove that a request did not happen.
+
+## Cardinality: the cost of labels
+
+Cardinality is the number of distinct series a metric produces. Each unique combination of label values is a separate series, and Prometheus keeps every series in memory. The `status` label of `http_requests_total` has a few dozen possible values, which is cheap. A label such as `user_id` or a full URL with a query string can have millions of values, and it can exhaust the memory of the monitoring system.
+
+The rule is to put only bounded values in metric labels. Unbounded identifiers belong in logs and traces, where each record is stored on its own. Count how many series the histogram of `scout` already has:
+
+```sh
+kubectl -n starfleet exec deploy/shuttle -- curl -s http://scout.starfleet.svc.cluster.local:9898/metrics | grep -c '^http_request_duration_seconds_bucket'
+```
+
+The command prints one number: the count of bucket series. A histogram has one series for each bucket and for each label combination, so a histogram with many labels multiplies the series count quickly. This is why a label must earn its place.
+
+## Choosing a signal from a question
+
+Back to the slow `scout`. A metric, the request duration histogram, shows that the 95th percentile rose after the release and shows how many requests are affected. A trace of a slow request shows that most of its time went into one downstream call. A log line from that service shows the timeout error with the request identifier. The three signals together move from the size of the problem to its cause.
+
+Each signal also fails in its own way. A metric hides which request was slow. A log does not show timing across services. A sampled trace may not exist for the request the user complains about. An average also hides a slow minority, so latency questions use percentiles from histograms.
+
+You now know what each signal records, how the metric types differ, why structured logs and propagated context matter, and why cardinality and sampling limit the data. The open question is how this data leaves the application and reaches a place where it can be queried.
 
 ## Common pitfalls
 
 > [!WARNING]
-> An average can hide tail latency, and sampled traces do not record every request. Low resource use is not proof of healthy user behavior.
+> Do not read a counter's raw value as a rate, and do not put unbounded values such as user identifiers in metric labels. A missing trace or log line can mean sampling, buffering or retention removed it, not that nothing happened.

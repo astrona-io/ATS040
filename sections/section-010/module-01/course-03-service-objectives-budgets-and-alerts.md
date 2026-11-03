@@ -5,35 +5,109 @@ exam_objectives:
 ---
 # Service Objectives, Budgets And Alerts
 
-The `scout` service handles 100,000 eligible requests during a reporting window. A service-level indicator (SLI) is a measured service property, such as the fraction of successful requests. A service-level objective (SLO) sets a target for that indicator over a defined window. A service-level agreement (SLA) is an agreement that can attach consequences to service commitments.
+A dashboard full of numbers does not tell a team when to act. Is 99.5% success good? Should an error rate of 2% wake someone at night? Without agreed answers, teams either ignore alerts or chase every spike. Service level objectives turn measurements into targets, and error budgets turn targets into decisions. This chapter defines those terms, does the arithmetic, and then shows how Prometheus rules put the arithmetic into an alert.
 
-If the SLO requires 99.9% successful requests, the allowed unsuccessful fraction is 0.1%. In this example, that permits 100 unsuccessful eligible requests. The error budget is the allowance implied by the objective. If 80 eligible requests have failed, 20 remain in the budget for that window. The arithmetic only makes sense after defining what counts as eligible and successful.
+## SLI, SLO and SLA
 
-A request-based budget is different from a time-based availability budget. Ten minutes of outage can affect different numbers of requests depending on traffic. Do not replace one measure with another without checking the SLI definition. A latency objective likewise needs a threshold and an agreed measurement method.
+A service level indicator (SLI) is a measurement of one aspect of service behavior, written as a ratio of good events to all valid events. For example, "the fraction of HTTP requests that did not return a 5xx status" is an SLI. A service level objective (SLO) is the target for an SLI over a time window, for example "99.9% of requests succeed, measured over 30 days". A service level agreement (SLA) is a contract with a customer that names consequences, such as credits, if the service misses a level.
 
-Alerts should lead to useful action. A user-impacting symptom or fast error-budget consumption can justify urgent response. A minor resource fluctuation may justify investigation without waking an operator. Burn rate describes how quickly the service consumes its budget relative to the allowed rate; a high sustained rate predicts that the target is at risk.
+The three terms describe three different things: the measurement, the internal target and the external promise. An SLA is normally looser than the SLO, so the team notices a problem before it breaks the contract.
 
-Reliability objectives guide release decisions rather than requiring perfect uptime. A team can use budget consumption to balance change and stabilization according to its policy. The budget is not permission to ignore user failures; it is a defined way to reason about the chosen target.
+A good SLI counts what users experience. It states which requests are valid, which responses are good and where it is measured. Requests that a client sends wrongly, such as HTTP 400, are usually not counted as failures of the service. Health checks and test traffic are not valid events.
 
-A useful objective states the indicator, threshold, window and affected service. An actionable alert adds an owner and a response path. Without these definitions, an impressive percentage or dashboard does not provide a clear reliability contract.
+## Error budget arithmetic
 
-## Calculating And Interpreting A Budget
+The error budget is the amount of failure the SLO allows: 100% minus the SLO. A 99.9% SLO leaves a budget of 0.1%, or 0.001. The budget is a number that the team spends, not a goal to reach. When it runs out, the team slows releases and fixes reliability.
 
-For a request-based SLO of 99.9% success, multiply the eligible request count by 0.001 to obtain the allowed failures. One million eligible requests permit one thousand failures in the defined window. A service with eight hundred failures has consumed eighty percent of that allowance. This says nothing about the time remaining unless the window and expected traffic are also considered.
+For a time-based view, convert the window to minutes and multiply by the budget. A 30-day window has 30 x 24 x 60 = 43,200 minutes. Check the result:
 
-If the service consumes failures at ten times the allowed rate over a meaningful interval, its burn rate is high. A sustained high rate threatens to exhaust the budget much sooner than steady compliant behavior. Alert design often considers both short-term urgency and longer-term persistence so an isolated fluctuation does not behave like an ongoing outage.
+<!-- astrona:playground:renew -->
 
-The SLI definition must specify which requests count. Internal test traffic, intentionally rejected invalid requests and retries can affect interpretation if not classified consistently. A success response that produced incorrect data may not meet the business definition of success. Choose an indicator that approximates what users actually need.
+```sh
+awk 'BEGIN { print 30 * 24 * 60 * (1 - 0.999) }'
+```
 
-## Targets And Agreements In Release Decisions
+You should see something like:
 
-An SLO is an internal or shared target for a specified measurement window. An SLA can make contractual commitments with defined remedies or consequences. The agreement's measurement method may differ from the team's operational indicator, so do not assume every SLO breach automatically has the same contractual result.
+```text
+43.2
+```
 
-A team can use budget consumption to decide whether to prioritize reliability work, reduce risky changes or continue ordinary releases. The policy should be defined before an incident. A budget is not a claim that failures are unimportant; it expresses the service level the team intends to sustain.
+A service with a 99.9% SLO may be unavailable for 43.2 minutes, which is 43 minutes and 12 seconds, in 30 days. Stricter targets shrink this fast: 99% allows 432 minutes (7.2 hours), and 99.99% allows 4.32 minutes.
 
-An alert should include a useful owner and action. A meaningful threshold with no responder or recovery path can still produce ineffective noise. Combine measured user impact, a clear target and a response contract so reliability numbers support decisions instead of merely decorating a dashboard.
+A request-based budget works the same way with counts. For one million valid requests in the window, a 99.9% SLO allows 1,000 failed requests. The two views are not interchangeable: ten minutes of outage fails very different numbers of requests at night and at noon. Choose one definition and keep it.
+
+## Measuring an SLI from counters
+
+The SLI of `scout` comes from the counter `http_requests_total`. Its `status` label separates good from bad. This command adds up all samples, adds up the samples whose status starts with 5, and prints the share of failures since the process started:
+
+```sh
+kubectl -n starfleet exec deploy/shuttle -- curl -s http://scout.starfleet.svc.cluster.local:9898/metrics | awk '/^http_requests_total\{/ { total += $2; if ($1 ~ /status="5/) failed += $2 } END { printf "%.4f\n", failed / total }'
+```
+
+The result is a number between 0 and 1. In the playground, `shuttle` sends about one failing request in ten, so the value is close to 0.1. That is one hundred times the 0.001 that a 99.9% SLO allows. A cumulative ratio since start is a poor SLI, because it never forgets old traffic. A query over a recent window, built with `rate()`, shows the current behavior.
+
+## Burn rate
+
+Burn rate is how fast the service spends its budget compared with the speed that would use exactly the whole budget over the window. Burn rate 1 spends the budget in exactly 30 days. Burn rate 10 spends it in 3 days. It is the current error ratio divided by the allowed error ratio.
+
+With a 99.9% SLO, the allowed ratio is 0.001. A burn rate of 14.4 means an error ratio of 14.4 x 0.001 = 0.0144. At that rate, one hour spends 14.4 / 720 = 2% of a 30-day budget, because 30 days have 720 hours. The whole budget is gone in 30 / 14.4, or about 2.1 days. Common alert policies use a high burn rate over a short window for a page, and a lower burn rate over a longer window for a ticket.
+
+## Recording and alerting rules
+
+Prometheus evaluates rules at a fixed interval and stores the results. A recording rule saves the result of an expression as a new series. An alerting rule fires when its expression returns data for a given time. Both live in rule files under `groups`, and each group has a `name` and a list of `rules`.
+
+```mermaid
+flowchart TB
+  M["Samples: http_requests_total"]
+  R["Recording rule"]
+  A["Alerting rule"]
+  S["Series: probe:http_error_ratio:rate5m"]
+  N["Alert: pending then firing"]
+  M -->|"rate and divide"| R
+  R -->|"stores"| S
+  S -->|"expr and for"| A
+  A -->|"after for elapses"| N
+```
+
+The diagram shows the data flow: the recording rule turns raw counters into a ratio series, and the alerting rule compares that series with a threshold. By convention, a recorded series is named `level:metric:operations`. This reference file, which is not applied, records an error ratio for `probe` and alerts on a 99.5% SLO at burn rate 6:
+
+```yaml
+groups:
+  - name: probe-slo
+    rules:
+      - record: probe:http_error_ratio:rate5m
+        expr: sum(rate(http_requests_total{job="probe",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="probe"}[5m]))
+      - alert: ProbeErrorBudgetBurn
+        expr: probe:http_error_ratio:rate5m > 6 * 0.005
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: probe is spending its error budget 6 times too fast
+```
+
+`record` names the new series. `expr` is the PromQL expression. `for` is how long the expression must keep returning data before the alert changes from pending to firing, which filters short spikes. `labels` attach to the alert and route it, and `annotations` carry human text. Check that the playground Prometheus has no rules yet:
+
+```sh
+kubectl -n starfleet exec deploy/shuttle -- curl -s http://prometheus.monitoring.svc.cluster.local:9090/api/v1/rules
+```
+
+You should see something like:
+
+```text
+{"status":"success","data":{"groups":[]}}
+```
+
+## Symptom and cause alerts
+
+A symptom alert watches what the user feels, such as the error ratio or latency of a request. A cause alert watches an internal condition, such as high CPU or a full disk. Pages should come from symptoms, because they state that users are affected now. Causes are better as tickets or dashboard panels, since high CPU may hurt nobody.
+
+Error budget burn is a symptom alert. It fires only when failures are real and large enough to threaten the objective, and it tells the responder how much time remains.
+
+You now know how an SLI becomes an SLO, how the budget and burn rate are computed, and how Prometheus rules turn a ratio into a pending and firing alert. A correct rule still depends on a scrape job that supplies the data, so the two halves of the chain must be built together.
 
 ## Common pitfalls
 
 > [!WARNING]
-> SLI, SLO and SLA describe measurement, target and agreement respectively. Request-based and time-based budgets are not interchangeable.
+> An alert expression that selects a series which does not exist returns nothing, and Prometheus stays silent. Check that the metric and its labels exist before trusting a rule. Also, do not mix a time-based and a request-based budget in one calculation.

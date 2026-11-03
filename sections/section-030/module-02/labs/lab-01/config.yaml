@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Migrate Removed API Versions (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-030-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: cronjob-migrated
+      description: "CronJob report-sweep exists and is served as batch/v1 with the original schedule and policy"
+      type: file
+      source: validation/validate-cronjob.sh
+      hint: "Change apiVersion to batch/v1 and apply the manifest cronjob.yaml from the ConfigMap."
+    - name: hpa-migrated
+      description: "HPA scout exists and is served as autoscaling/v2 with 1 to 3 replicas and 70 percent CPU"
+      type: file
+      source: validation/validate-hpa.sh
+      hint: "Change apiVersion to autoscaling/v2 and apply the manifest hpa.yaml."
+    - name: pdb-migrated
+      description: "PodDisruptionBudget scout-pdb exists and is served as policy/v1 with minAvailable 1 and the scout selector"
+      type: file
+      source: validation/validate-pdb.sh
+      hint: "Change apiVersion to policy/v1 and apply the manifest pdb.yaml."
+    - name: migration-notes
+      description: "ConfigMap migration-notes records the current apiVersion of each kind"
+      type: file
+      source: validation/validate-notes.sh
+      hint: "Create ConfigMap migration-notes in starfleet with keys cronjob, hpa and pdb holding batch/v1, autoscaling/v2 and policy/v1."
+    - name: manifests-kept
+      description: "The legacy-manifests ConfigMap is unchanged and scout is not modified"
+      type: file
+      source: validation/validate-untouched.sh
+      hint: "Do not edit the ConfigMap or scout. Save the migrated manifests as new files."
+
+teardown:
+  keepCluster: false

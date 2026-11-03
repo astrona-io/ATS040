@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Observability And Reliability (PLAYGROUND) - playground environment.
+# A clean sandbox: Prometheus in `monitoring` (scrapes only itself, empty
+# rules file) and the example workloads in `starfleet`. No task, no grading,
+# no `astrona submit`.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-playground-010-01
+  docs:
+    guide: docs/overview.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+      - quay.io/prometheus/prometheus:v3.5.0
+
+bootstrap:
+  manifests:
+    - name: monitoring
+      type: file
+      source: manifests/monitoring.yaml
+    - name: starfleet
+      type: file
+      source: manifests/starfleet.yaml
+  waitFor:
+    - resource: deploy/prometheus
+      namespace: monitoring
+    - resource: deploy/scout
+      namespace: starfleet
+    - resource: deploy/probe
+      namespace: starfleet
+    - resource: deploy/shuttle
+      namespace: starfleet
+
+teardown:
+  keepCluster: false

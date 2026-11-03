@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Community And API Capstone (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-capstone-030
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: probe-path
+      description: "The readiness probe of beacon uses /readyz"
+      type: file
+      source: validation/validate-probe-path.sh
+      hint: "The application serves /readyz. The path /ready returns 404."
+    - name: rollout-ready
+      description: "Deployment beacon has 2 available replicas on the new revision"
+      type: file
+      source: validation/validate-rollout-ready.sh
+      hint: "Fix the probe in the Deployment and wait for the rollout to finish."
+    - name: change-cause
+      description: "The Deployment records why it changed in the change-cause annotation and has revision 2 or higher"
+      type: file
+      source: validation/validate-change-cause.sh
+      hint: "Set the annotation kubernetes.io/change-cause with a sentence that explains the change."
+    - name: cronjob-v1
+      description: "CronJob beacon-sweep exists through batch/v1 with the schedule and policy of the legacy manifest"
+      type: file
+      source: validation/validate-cronjob-v1.sh
+      hint: "Read the legacy manifest, change only what the current API version requires and apply it."
+    - name: change-record
+      description: "ConfigMap change-record states the replaced version, its replacement and the beta support window"
+      type: file
+      source: validation/validate-change-record.sh
+      hint: "The Kubernetes deprecation policy gives beta APIs 9 months or 3 releases, whichever is longer, after deprecation."
+    - name: issue-report
+      description: "ConfigMap issue-report names the bug and the special interest group that owns CronJob"
+      type: file
+      source: validation/validate-issue-report.sh
+      hint: "CronJob and Deployment belong to the group for applications."
+
+teardown:
+  keepCluster: false
