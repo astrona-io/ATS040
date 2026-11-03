@@ -106,8 +106,141 @@ modules:
           - name: "Prometheus recording rules"
             url: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
       - type: reading
+        title: "Kubernetes Built-In Observability"
+        path: sections/section-010/module-01/course-04-kubernetes-built-in-observability.md
+      - type: reading
         title: "Summary"
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
+
+      - type: reading
+        title: "OpenTelemetry, Tracing And Logs"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Signals, Instrumentation And OTLP"
+        path: sections/section-010/module-02/course-01-signals-instrumentation-and-otlp.md
+      - type: reading
+        title: "The Collector And Its Pipelines"
+        path: sections/section-010/module-02/course-02-collector-and-pipelines.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Configure Telemetry For A Workload Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: observability
+        task_kind: build
+        tags: [opentelemetry, otlp, collector, tracing, sampling]
+        learning_goals:
+          - Set the standard OpenTelemetry variables on a workload
+          - Define a Collector configuration with receivers, processors and exporters
+          - Wire a traces pipeline and a metrics pipeline
+        resources:
+          - name: "Prometheus documentation"
+            url: https://prometheus.io/docs/introduction/overview/
+          - name: "OpenTelemetry documentation"
+            url: https://opentelemetry.io/docs/
+      - type: reading
+        title: "Distributed Tracing And Sampling"
+        path: sections/section-010/module-02/course-03-distributed-tracing-and-sampling.md
+      - type: reading
+        title: "Logs In Kubernetes"
+        path: sections/section-010/module-02/course-04-logs-in-kubernetes.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: OpenTelemetry, Tracing And Logs"
+        path: sections/section-010/module-02/quiz.yaml
+        question_count: 10
+        pass_score: 70
+      - type: reading
+        title: "Prometheus And PromQL"
+        path: sections/section-010/module-03/course.md
+      - type: reading
+        title: "Architecture And Data Model"
+        path: sections/section-010/module-03/course-01-architecture-and-data-model.md
+      - type: reading
+        title: "Metric Types And Exposition"
+        path: sections/section-010/module-03/course-02-metric-types-and-exposition.md
+      - type: reading
+        title: "PromQL"
+        path: sections/section-010/module-03/course-03-promql.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Record Latency And Alert On It With PromQL Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: observability
+        task_kind: build
+        tags: [prometheus, promql, recording-rule, alert-rule, histogram]
+        learning_goals:
+          - Record a request rate and a 95th percentile from histogram buckets
+          - Alert when the recorded latency stays above a threshold
+          - Confirm that Prometheus loads all rules with health ok
+        resources:
+          - name: "Prometheus documentation"
+            url: https://prometheus.io/docs/introduction/overview/
+          - name: "OpenTelemetry documentation"
+            url: https://opentelemetry.io/docs/
+      - type: reading
+        title: "Alerting, Alertmanager And Dashboards"
+        path: sections/section-010/module-03/course-04-alerting-alertmanager-and-dashboards.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Prometheus And PromQL"
+        path: sections/section-010/module-03/quiz.yaml
+        question_count: 10
+        pass_score: 70
+      - type: reading
+        title: "Cloud Cost Management"
+        path: sections/section-010/module-04/course.md
+      - type: reading
+        title: "Cost Drivers And FinOps"
+        path: sections/section-010/module-04/course-01-cost-drivers-and-finops.md
+      - type: reading
+        title: "Requests, Usage, Quota And Right-Sizing"
+        path: sections/section-010/module-04/course-02-requests-usage-quota-and-rightsizing.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-04/labs/lab-01/question.md
+      - type: lab
+        title: "Budget A Namespace And Right-Size A Workload Lab"
+        path: sections/section-010/module-04/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: cost-management
+        task_kind: build
+        tags: [finops, resource-quota, limit-range, labels, rightsizing]
+        learning_goals:
+          - Label a namespace for cost allocation
+          - Cap the namespace with a ResourceQuota and default container sizes with a LimitRange
+          - Right-size a workload without losing availability
+        resources:
+          - name: "Prometheus documentation"
+            url: https://prometheus.io/docs/introduction/overview/
+          - name: "OpenTelemetry documentation"
+            url: https://opentelemetry.io/docs/
+      - type: reading
+        title: "Allocation, Labels And Cost Tools"
+        path: sections/section-010/module-04/course-03-allocation-labels-and-cost-tools.md
+      - type: reading
+        title: "Purchasing Options And Scaling Levers"
+        path: sections/section-010/module-04/course-04-purchasing-options-and-scaling-levers.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-04/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Cloud Cost Management"
+        path: sections/section-010/module-04/quiz.yaml
+        question_count: 10
+        pass_score: 70
 
       - type: reading
         title: "Question"
@@ -195,8 +328,14 @@ modules:
           - name: "CronJob"
             url: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
       - type: reading
+        title: "Twelve-Factor Applications And Immutable Infrastructure"
+        path: sections/section-020/module-01/course-03-twelve-factor-and-immutable-infrastructure.md
+      - type: reading
+        title: "Container Design Patterns"
+        path: sections/section-020/module-01/course-04-container-design-patterns.md
+      - type: reading
         title: "Summary"
-        path: sections/section-020/module-01/course-03-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
 
       - type: reading
         title: "Cloud Native Ecosystem"
@@ -207,6 +346,12 @@ modules:
       - type: reading
         title: "Matching Projects To Platform Jobs"
         path: sections/section-020/module-02/course-02-matching-projects-to-platform-jobs.md
+      - type: reading
+        title: "The CNCF Landscape By Category"
+        path: sections/section-020/module-02/course-03-the-cncf-landscape-by-category.md
+      - type: reading
+        title: "Evaluating And Adopting A Project"
+        path: sections/section-020/module-02/course-04-evaluating-and-adopting-a-project.md
       - type: reading
         title: "Question"
         path: sections/section-020/module-02/labs/lab-01/question.md
@@ -229,7 +374,7 @@ modules:
             url: https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/
       - type: reading
         title: "Summary"
-        path: sections/section-020/module-02/course-03-summary.md
+        path: sections/section-020/module-02/course-05-summary.md
 
       - type: reading
         title: "Autoscaling"
@@ -243,6 +388,9 @@ modules:
       - type: reading
         title: "Event-Driven Scaling And Behavior"
         path: sections/section-020/module-03/course-03-event-driven-scaling-and-behavior.md
+      - type: reading
+        title: "Troubleshooting Autoscaling"
+        path: sections/section-020/module-03/course-04-troubleshooting-autoscaling.md
       - type: reading
         title: "Question"
         path: sections/section-020/module-03/labs/lab-01/question.md
@@ -265,7 +413,131 @@ modules:
             url: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
       - type: reading
         title: "Summary"
-        path: sections/section-020/module-03/course-04-summary.md
+        path: sections/section-020/module-03/course-05-summary.md
+
+      - type: reading
+        title: "Open Standards And Interfaces"
+        path: sections/section-020/module-04/course.md
+      - type: reading
+        title: "Open Standards And The OCI Specifications"
+        path: sections/section-020/module-04/course-01-open-standards-and-the-oci-specifications.md
+      - type: reading
+        title: "The Container Runtime Interface And Runtime Classes"
+        path: sections/section-020/module-04/course-02-container-runtime-interface-and-runtime-classes.md
+      - type: reading
+        title: "The Container Network And Storage Interfaces"
+        path: sections/section-020/module-04/course-03-container-network-and-storage-interfaces.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-04/labs/lab-01/question.md
+      - type: lab
+        title: "Use A RuntimeClass And A Persistent Volume Lab"
+        path: sections/section-020/module-04/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: open-standards
+        task_kind: build
+        tags: [oci, cri, runtimeclass, csi, pvc]
+        learning_goals:
+          - Create a RuntimeClass for the runc handler
+          - Create a PersistentVolumeClaim on the default StorageClass
+          - Run a pod that uses both and writes a file to the volume
+        resources:
+          - name: "Kubernetes documentation"
+            url: https://kubernetes.io/docs/home/
+      - type: reading
+        title: "Mesh, Event And Telemetry Standards"
+        path: sections/section-020/module-04/course-04-mesh-event-and-telemetry-standards.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-04/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Open Standards And Interfaces"
+        path: sections/section-020/module-04/quiz.yaml
+        question_count: 10
+        pass_score: 70
+      - type: reading
+        title: "Serverless And Event-Driven Platforms"
+        path: sections/section-020/module-05/course.md
+      - type: reading
+        title: "The Serverless Model"
+        path: sections/section-020/module-05/course-01-the-serverless-model.md
+      - type: reading
+        title: "Knative Serving And Eventing"
+        path: sections/section-020/module-05/course-02-knative-serving-and-eventing.md
+      - type: reading
+        title: "Scale To Zero, Event-Driven Scaling And Batch Workloads"
+        path: sections/section-020/module-05/course-03-scale-to-zero-event-driven-scaling-and-batch-workloads.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-05/labs/lab-01/question.md
+      - type: lab
+        title: "Create A Job And A CronJob With Limits Lab"
+        path: sections/section-020/module-05/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: serverless
+        task_kind: build
+        tags: [job, cronjob, ttl, deadline, batch]
+        learning_goals:
+          - Create a Job with a retry limit, a deadline and automatic cleanup
+          - Create a CronJob with a schedule and a concurrency policy
+          - Limit the history and the run time of the scheduled Jobs
+        resources:
+          - name: "Kubernetes documentation"
+            url: https://kubernetes.io/docs/home/
+      - type: reading
+        title: "Choosing Serverless, Containers Or Virtual Machines"
+        path: sections/section-020/module-05/course-04-choosing-serverless-containers-or-virtual-machines.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-05/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Serverless And Event-Driven Platforms"
+        path: sections/section-020/module-05/quiz.yaml
+        question_count: 10
+        pass_score: 70
+      - type: reading
+        title: "Cloud Native Roles And Personas"
+        path: sections/section-020/module-06/course.md
+      - type: reading
+        title: "The Main Cloud Native Roles"
+        path: sections/section-020/module-06/course-01-the-main-cloud-native-roles.md
+      - type: reading
+        title: "Platform Engineering And Team Topologies"
+        path: sections/section-020/module-06/course-02-platform-engineering-and-team-topologies.md
+      - type: reading
+        title: "Role-Based Access Control For Personas"
+        path: sections/section-020/module-06/course-03-role-based-access-control-for-personas.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-06/labs/lab-01/question.md
+      - type: lab
+        title: "Give Two Personas The Access They Need Lab"
+        path: sections/section-020/module-06/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: personas
+        task_kind: build
+        tags: [rbac, role, rolebinding, least-privilege, auth-can-i]
+        learning_goals:
+          - Create a developer Role and an auditor Role in one namespace
+          - Bind each Role to a user with a RoleBinding
+          - Verify the effective access with kubectl auth can-i
+        resources:
+          - name: "Kubernetes documentation"
+            url: https://kubernetes.io/docs/home/
+      - type: reading
+        title: "DevOps And Site Reliability Engineering Practices"
+        path: sections/section-020/module-06/course-04-devops-and-site-reliability-engineering-practices.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-06/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Cloud Native Roles And Personas"
+        path: sections/section-020/module-06/quiz.yaml
+        question_count: 10
+        pass_score: 70
 
       - type: reading
         title: "Question"
@@ -313,6 +585,12 @@ modules:
         title: "Issues, Reviews And Working Groups"
         path: sections/section-030/module-01/course-02-issues-reviews-and-working-groups.md
       - type: reading
+        title: "Open Source Licenses In Depth"
+        path: sections/section-030/module-01/course-03-licenses-in-depth.md
+      - type: reading
+        title: "Judging The Health Of A Project"
+        path: sections/section-030/module-01/course-04-judging-project-health.md
+      - type: reading
         title: "Question"
         path: sections/section-030/module-01/labs/lab-01/question.md
       - type: lab
@@ -334,7 +612,7 @@ modules:
             url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
       - type: reading
         title: "Summary"
-        path: sections/section-030/module-01/course-03-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
 
       - type: reading
         title: "API Maturity And Deprecation"
@@ -348,6 +626,9 @@ modules:
       - type: reading
         title: "Migrating Manifests To Current Versions"
         path: sections/section-030/module-02/course-03-migrating-manifests-to-current-versions.md
+      - type: reading
+        title: "Custom Resource Versions And Conversion"
+        path: sections/section-030/module-02/course-04-custom-resource-versions-and-conversion.md
       - type: reading
         title: "Question"
         path: sections/section-030/module-02/labs/lab-01/question.md
@@ -370,7 +651,49 @@ modules:
             url: https://kubernetes.io/docs/reference/using-api/deprecation-policy/
       - type: reading
         title: "Summary"
-        path: sections/section-030/module-02/course-04-summary.md
+        path: sections/section-030/module-02/course-05-summary.md
+
+      - type: reading
+        title: "CNCF Structure And Kubernetes Governance"
+        path: sections/section-030/module-03/course.md
+      - type: reading
+        title: "CNCF Structure And The Project Lifecycle"
+        path: sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+      - type: reading
+        title: "Kubernetes Governance, SIGs And KEPs"
+        path: sections/section-030/module-03/course-02-kubernetes-governance-sigs-and-keps.md
+      - type: reading
+        title: "The Release Cycle And Version Support"
+        path: sections/section-030/module-03/course-03-the-release-cycle-and-version-support.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Record Release Facts That Match The Cluster Lab"
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: governance
+        task_kind: build
+        tags: [release-cycle, versions, configmap, sig]
+        learning_goals:
+          - Read the server version of the live cluster
+          - Record release cycle facts in a ConfigMap
+          - Annotate the record with the owning SIG
+        resources:
+          - name: "Kubernetes community"
+            url: https://github.com/kubernetes/community
+      - type: reading
+        title: "The Code Of Conduct And Taking Part"
+        path: sections/section-030/module-03/course-04-code-of-conduct-and-taking-part.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: CNCF Structure And Kubernetes Governance"
+        path: sections/section-030/module-03/quiz.yaml
+        question_count: 10
+        pass_score: 70
 
       - type: reading
         title: "Question"

@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# CNCF Structure And Kubernetes Governance (PLAYGROUND) - playground environment.
+# Sandbox with the scout application and a shuttle curl pod, for reading the version and feature facts of a live cluster and recording them in a ConfigMap.
+# A clean sandbox with no task, no grading and no `astrona submit`.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-playground-030-03
+  docs:
+    guide: docs/overview.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  manifests:
+    - name: starfleet
+      type: file
+      source: manifests/starfleet.yaml
+  waitFor:
+    - resource: deploy/scout
+      namespace: starfleet
+    - resource: deploy/shuttle
+      namespace: starfleet
+
+teardown:
+  keepCluster: false

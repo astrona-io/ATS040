@@ -1,0 +1,237 @@
+# Knowledge check for module 03 of section 010. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-010-m03
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Prometheus And PromQL"
+placement:
+  position: after
+  reading: sections/section-010/module-03/course-05-summary.md
+questions:
+- id: ats040-010-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Explain the pull model"
+  source_readings:
+  - sections/section-010/module-03/course-01-architecture-and-data-model.md
+  prompt: "How does Prometheus normally get the metrics of an application?"
+  options:
+  - id: a
+    text: "Alertmanager copies them from the application."
+    explanation: "Alertmanager only handles alerts."
+  - id: b
+    text: "Prometheus sends an HTTP request to the /metrics path of the target at the scrape interval."
+    explanation: "Correct. This is the pull model."
+  - id: c
+    text: "The kubelet writes them to the Prometheus database."
+    explanation: "The kubelet exposes its own metrics, and Prometheus scrapes them."
+  - id: d
+    text: "The application pushes samples to Prometheus every second."
+    explanation: "Pushing is the exception and uses the Pushgateway for short-lived jobs."
+  correct_option: b
+  explanation: "Correct. This is the pull model."
+- id: ats040-010-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Read the up metric"
+  source_readings:
+  - sections/section-010/module-03/course-01-architecture-and-data-model.md
+  prompt: "What does up{job=\"scout\"} == 0 mean?"
+  options:
+  - id: a
+    text: "The scout job is not defined."
+    explanation: "A job that is not defined has no up series at all."
+  - id: b
+    text: "The metric http_requests_total is zero."
+    explanation: "up is a separate metric that Prometheus creates."
+  - id: c
+    text: "The last scrape of a scout target failed."
+    explanation: "Correct. up is 1 when the scrape works and 0 when it fails."
+  - id: d
+    text: "The scout application has no requests."
+    explanation: "up does not measure traffic."
+  correct_option: c
+  explanation: "Correct. up is 1 when the scrape works and 0 when it fails."
+- id: ats040-010-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Spot a cardinality problem"
+  source_readings:
+  - sections/section-010/module-03/course-01-architecture-and-data-model.md
+  prompt: "A team adds the label user_id to a request counter. The service has two million users. What is the risk?"
+  options:
+  - id: a
+    text: "The counter can no longer be scraped over HTTP."
+    explanation: "Scraping works. The problem is the number of series."
+  - id: b
+    text: "The counter turns into a gauge."
+    explanation: "The type does not change."
+  - id: c
+    text: "Alertmanager refuses the alerts."
+    explanation: "Alerting is not affected by this label directly."
+  - id: d
+    text: "Every user creates a new series, which can exhaust memory and disk."
+    explanation: "Correct. Each label combination is a series."
+  correct_option: d
+  explanation: "Correct. Each label combination is a series."
+- id: ats040-010-m03-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Choose the metric type"
+  source_readings:
+  - sections/section-010/module-03/course-02-metric-types-and-exposition.md
+  prompt: "Which metric type fits the number of ready replicas of a Deployment, which can rise and fall?"
+  options:
+  - id: a
+    text: "Gauge"
+    explanation: "Correct. A gauge goes up and down and is read directly."
+  - id: b
+    text: "Summary"
+    explanation: "A summary reports quantiles of observations."
+  - id: c
+    text: "Counter"
+    explanation: "A counter only goes up."
+  - id: d
+    text: "Histogram"
+    explanation: "A histogram records the distribution of observations."
+  correct_option: a
+  explanation: "Correct. A gauge goes up and down and is read directly."
+- id: ats040-010-m03-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick histogram or summary"
+  source_readings:
+  - sections/section-010/module-03/course-02-metric-types-and-exposition.md
+  prompt: "A service runs on 20 replicas and the team needs one 95th percentile for the whole service. Which type should it use?"
+  options:
+  - id: a
+    text: "A summary, because it is exact for the whole service."
+    explanation: "Summary quantiles cannot be aggregated across instances."
+  - id: b
+    text: "A histogram, because buckets can be summed across instances."
+    explanation: "Correct. histogram_quantile works on the summed buckets."
+  - id: c
+    text: "A gauge that stores the last latency."
+    explanation: "A gauge cannot give a percentile."
+  - id: d
+    text: "A counter of slow requests only."
+    explanation: "That gives a count and not a percentile."
+  correct_option: b
+  explanation: "Correct. histogram_quantile works on the summed buckets."
+- id: ats040-010-m03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Match exporters to jobs"
+  source_readings:
+  - sections/section-010/module-03/course-02-metric-types-and-exposition.md
+  prompt: "Which component reports the CPU usage of containers, and which one reports the number of ready replicas?"
+  options:
+  - id: a
+    text: "node-exporter for both."
+    explanation: "node-exporter reports node-level hardware and operating system metrics."
+  - id: b
+    text: "kube-state-metrics for both."
+    explanation: "kube-state-metrics reports object state and not usage."
+  - id: c
+    text: "cAdvisor for CPU usage, and kube-state-metrics for ready replicas."
+    explanation: "Correct. One reports usage and the other reports the state of API objects."
+  - id: d
+    text: "Grafana for both."
+    explanation: "Grafana draws dashboards and does not produce metrics."
+  correct_option: c
+  explanation: "Correct. One reports usage and the other reports the state of API objects."
+- id: ats040-010-m03-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Query a counter"
+  source_readings:
+  - sections/section-010/module-03/course-03-promql.md
+  prompt: "A dashboard needs the requests per second of the counter http_requests_total. Which expression is correct?"
+  options:
+  - id: a
+    text: "rate(up[5m])"
+    explanation: "up is a gauge of target health."
+  - id: b
+    text: "http_requests_total"
+    explanation: "This is the raw, ever-growing counter."
+  - id: c
+    text: "avg(http_requests_total)"
+    explanation: "Averaging a raw counter has no meaning."
+  - id: d
+    text: "sum(rate(http_requests_total[5m]))"
+    explanation: "Correct. rate gives the per-second rate and sum combines the series."
+  correct_option: d
+  explanation: "Correct. rate gives the per-second rate and sum combines the series."
+- id: ats040-010-m03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Find the missing label"
+  source_readings:
+  - sections/section-010/module-03/course-03-promql.md
+  prompt: "A histogram_quantile query returns no data. The query is sum(rate(x_bucket[5m])) inside the function. What is missing?"
+  options:
+  - id: a
+    text: "by (le) in the sum, to keep the bucket boundaries."
+    explanation: "Correct. histogram_quantile needs the le label."
+  - id: b
+    text: "A longer window than 5m."
+    explanation: "The window is not the cause."
+  - id: c
+    text: "The label job in the selector."
+    explanation: "A missing job label only changes which series are selected."
+  - id: d
+    text: "A gauge in the expression."
+    explanation: "Gauges are not needed."
+  correct_option: a
+  explanation: "Correct. histogram_quantile needs the le label."
+- id: ats040-010-m03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain the for clause"
+  source_readings:
+  - sections/section-010/module-03/course-04-alerting-alertmanager-and-dashboards.md
+  prompt: "What does for: 2m in an alerting rule do?"
+  options:
+  - id: a
+    text: "It evaluates the rule every two minutes."
+    explanation: "The evaluation interval is set separately."
+  - id: b
+    text: "It keeps the alert pending until the condition has held for two minutes."
+    explanation: "Correct. It prevents a notification for a short spike."
+  - id: c
+    text: "It deletes the alert after two minutes."
+    explanation: "Alerts resolve when the condition stops."
+  - id: d
+    text: "It sets the scrape timeout to two minutes."
+    explanation: "Scrape timeouts are set in the scrape job."
+  correct_option: b
+  explanation: "Correct. It prevents a notification for a short spike."
+- id: ats040-010-m03-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Assign alert tasks"
+  source_readings:
+  - sections/section-010/module-03/course-04-alerting-alertmanager-and-dashboards.md
+  prompt: "Which component groups alerts, applies silences and sends the notification to a receiver?"
+  options:
+  - id: a
+    text: "kube-state-metrics"
+    explanation: "It exposes the state of Kubernetes objects."
+  - id: b
+    text: "Prometheus"
+    explanation: "Prometheus evaluates rules and sends firing alerts on."
+  - id: c
+    text: "Alertmanager"
+    explanation: "Correct. It groups, routes, inhibits, silences and delivers."
+  - id: d
+    text: "Grafana"
+    explanation: "Grafana draws dashboards from data sources."
+  correct_option: c
+  explanation: "Correct. It groups, routes, inhibits, silences and delivers."

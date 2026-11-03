@@ -1,0 +1,237 @@
+# Knowledge check for module 05 of section 020. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-020-m05
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Serverless And Event-Driven Platforms"
+placement:
+  position: after
+  reading: sections/section-020/module-05/course-05-summary.md
+questions:
+- id: ats040-020-m05-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define serverless"
+  source_readings:
+  - sections/section-020/module-05/course-01-the-serverless-model.md
+  prompt: "What does serverless mean?"
+  options:
+  - id: a
+    text: "There are no servers involved."
+    explanation: "Servers exist; the provider manages them."
+  - id: b
+    text: "The platform provisions and scales the servers and bills by use, so the team does not manage servers."
+    explanation: "Correct."
+  - id: c
+    text: "The code runs only on the developer laptop."
+    explanation: "Serverless runs on a platform."
+  - id: d
+    text: "The application has no network access."
+    explanation: "Network access is normal."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-020-m05-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the two forms"
+  source_readings:
+  - sections/section-020/module-05/course-01-the-serverless-model.md
+  prompt: "Which pair names the two forms of serverless?"
+  options:
+  - id: a
+    text: "Build as a Service and Test as a Service"
+    explanation: "These are not standard terms."
+  - id: b
+    text: "Containers as a Service and Virtual machines as a Service"
+    explanation: "These are infrastructure models."
+  - id: c
+    text: "Functions as a Service and Backend as a Service"
+    explanation: "Correct. One runs code on a trigger and the other replaces backend parts with managed services."
+  - id: d
+    text: "Platform as a Service and Software as a Service"
+    explanation: "These are cloud service models, not the two serverless forms."
+  correct_option: c
+  explanation: "Correct. One runs code on a trigger and the other replaces backend parts with managed services."
+- id: ats040-020-m05-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name a limit"
+  source_readings:
+  - sections/section-020/module-05/course-01-the-serverless-model.md
+  prompt: "What is a cold start?"
+  options:
+  - id: a
+    text: "A node that reboots."
+    explanation: "A reboot is not a cold start."
+  - id: b
+    text: "A cluster that is created from nothing."
+    explanation: "This is cluster creation."
+  - id: c
+    text: "A pod that fails its readiness probe."
+    explanation: "This is a health check failure."
+  - id: d
+    text: "The delay of the first request while the platform starts a new instance after a quiet period."
+    explanation: "Correct."
+  correct_option: d
+  explanation: "Correct."
+- id: ats040-020-m05-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Match the Knative part"
+  source_readings:
+  - sections/section-020/module-05/course-02-knative-serving-and-eventing.md
+  prompt: "Which Knative part receives events and delivers them to subscribers by filter?"
+  options:
+  - id: a
+    text: "Eventing, using a broker and triggers"
+    explanation: "Correct."
+  - id: b
+    text: "Activator"
+    explanation: "The activator holds requests for a workload that is scaled to zero."
+  - id: c
+    text: "Serving"
+    explanation: "Serving handles requests and scaling."
+  - id: d
+    text: "Revision"
+    explanation: "A revision is a snapshot of a workload."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-020-m05-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Describe a revision"
+  source_readings:
+  - sections/section-020/module-05/course-02-knative-serving-and-eventing.md
+  prompt: "What is a Knative revision?"
+  options:
+  - id: a
+    text: "A running pod."
+    explanation: "A revision may have zero pods."
+  - id: b
+    text: "An immutable snapshot of the code and configuration, created on each change."
+    explanation: "Correct. A route can split traffic between revisions."
+  - id: c
+    text: "A cluster upgrade."
+    explanation: "This is not a revision."
+  - id: d
+    text: "A namespace."
+    explanation: "A revision is not a namespace."
+  correct_option: b
+  explanation: "Correct. A route can split traffic between revisions."
+- id: ats040-020-m05-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain the activator"
+  source_readings:
+  - sections/section-020/module-05/course-02-knative-serving-and-eventing.md
+  prompt: "A Knative workload is scaled to zero and a request arrives. What handles the request?"
+  options:
+  - id: a
+    text: "The Horizontal Pod Autoscaler."
+    explanation: "It cannot scale from zero by default."
+  - id: b
+    text: "The kube-proxy."
+    explanation: "It has no pod to forward to."
+  - id: c
+    text: "The activator holds the request, triggers a scale up and forwards the request when a pod is ready."
+    explanation: "Correct."
+  - id: d
+    text: "The request is dropped."
+    explanation: "Knative holds it."
+  correct_option: c
+  explanation: "Correct."
+- id: ats040-020-m05-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick the scaler"
+  source_readings:
+  - sections/section-020/module-05/course-03-scale-to-zero-event-driven-scaling-and-batch-workloads.md
+  prompt: "Which project scales a Deployment by the length of a message queue?"
+  options:
+  - id: a
+    text: "CoreDNS"
+    explanation: "It provides DNS."
+  - id: b
+    text: "Kustomize"
+    explanation: "It builds manifests."
+  - id: c
+    text: "Knative Serving"
+    explanation: "It scales by request concurrency."
+  - id: d
+    text: "KEDA"
+    explanation: "Correct. It uses scalers that read external metrics."
+  correct_option: d
+  explanation: "Correct. It uses scalers that read external metrics."
+- id: ats040-020-m05-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Set a Job limit"
+  source_readings:
+  - sections/section-020/module-05/course-03-scale-to-zero-event-driven-scaling-and-batch-workloads.md
+  prompt: "Which Job field stops the Job after a total run time?"
+  options:
+  - id: a
+    text: "activeDeadlineSeconds"
+    explanation: "Correct."
+  - id: b
+    text: "completions"
+    explanation: "It counts successful pods."
+  - id: c
+    text: "backoffLimit"
+    explanation: "It limits retries."
+  - id: d
+    text: "ttlSecondsAfterFinished"
+    explanation: "It deletes a finished Job."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-020-m05-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose a policy"
+  source_readings:
+  - sections/section-020/module-05/course-03-scale-to-zero-event-driven-scaling-and-batch-workloads.md
+  prompt: "A CronJob task can run longer than its interval, and runs must not overlap. Which setting does this?"
+  options:
+  - id: a
+    text: "concurrencyPolicy: Allow"
+    explanation: "This lets runs overlap."
+  - id: b
+    text: "concurrencyPolicy: Forbid"
+    explanation: "Correct. The new run is skipped while the old one is active."
+  - id: c
+    text: "suspend: true"
+    explanation: "This stops all new runs."
+  - id: d
+    text: "backoffLimit: 0"
+    explanation: "This limits retries."
+  correct_option: b
+  explanation: "Correct. The new run is skipped while the old one is active."
+- id: ats040-020-m05-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose a model"
+  source_readings:
+  - sections/section-020/module-05/course-04-choosing-serverless-containers-or-virtual-machines.md
+  prompt: "A task runs once a day for two minutes. Which choice usually costs least?"
+  options:
+  - id: a
+    text: "A virtual machine that runs all day."
+    explanation: "It is billed all day."
+  - id: b
+    text: "A Deployment with three replicas."
+    explanation: "It runs all day."
+  - id: c
+    text: "A CronJob or a function that runs only during the task."
+    explanation: "Correct."
+  - id: d
+    text: "A StatefulSet."
+    explanation: "It is for stateful, long-lived workloads."
+  correct_option: c
+  explanation: "Correct."

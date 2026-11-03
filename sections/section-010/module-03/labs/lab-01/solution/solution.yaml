@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+data:
+  rules.yml: |
+    groups:
+      - name: scout-latency
+        rules:
+          - record: scout:http_requests:rate5m
+            expr: sum(rate(http_requests_total{job="scout"}[5m]))
+          - record: scout:http_request_duration_seconds:p95_5m
+            expr: histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job="scout"}[5m])))
+          - alert: ScoutSlow
+            expr: scout:http_request_duration_seconds:p95_5m > 0.5
+            for: 5m
+            labels:
+              severity: ticket
+            annotations:
+              summary: "scout p95 latency is above 0.5 seconds"

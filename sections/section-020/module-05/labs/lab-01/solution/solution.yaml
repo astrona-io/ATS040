@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beacon
+  namespace: starfleet
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: beacon
+          image: curlimages/curl:8.22.0
+          command: ["sh", "-c", "echo beacon sent"]
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: patrol
+  namespace: starfleet
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 60
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: patrol
+              image: curlimages/curl:8.22.0
+              command: ["sh", "-c", "echo patrol done"]

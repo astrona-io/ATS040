@@ -371,3 +371,163 @@ questions:
     correct_option: d
     explanation: "A server dry run runs validation and admission and discards the result."
 
+  - id: ats040-final-q16
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Separate the API from the SDK"
+    source_readings:
+      - sections/section-010/module-02/course-01-signals-instrumentation-and-otlp.md
+    prompt: "What is the job of the OpenTelemetry SDK, as opposed to the API?"
+    options:
+      - id: a
+        text: "It receives OTLP and forwards it to back ends."
+        explanation: "That is the Collector."
+      - id: b
+        text: "It stores traces for later queries."
+        explanation: "Trace stores are back ends such as Jaeger or Tempo."
+      - id: c
+        text: "It implements the API and decides how to sample, batch and export data."
+        explanation: "Correct. The API only defines the calls that code makes."
+      - id: d
+        text: "It defines the calls that library code makes to start spans."
+        explanation: "That is the API."
+    correct_option: c
+    explanation: "Correct. The API only defines the calls that code makes."
+
+  - id: ats040-final-q17
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the up metric"
+    source_readings:
+      - sections/section-010/module-03/course-01-architecture-and-data-model.md
+    prompt: "What does up{job=\"scout\"} == 0 mean?"
+    options:
+      - id: a
+        text: "The scout job is not defined."
+        explanation: "A job that is not defined has no up series at all."
+      - id: b
+        text: "The metric http_requests_total is zero."
+        explanation: "up is a separate metric that Prometheus creates."
+      - id: c
+        text: "The last scrape of a scout target failed."
+        explanation: "Correct. up is 1 when the scrape works and 0 when it fails."
+      - id: d
+        text: "The scout application has no requests."
+        explanation: "up does not measure traffic."
+    correct_option: c
+    explanation: "Correct. up is 1 when the scrape works and 0 when it fails."
+
+  - id: ats040-final-q18
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Define FinOps"
+    source_readings:
+      - sections/section-010/module-04/course-01-cost-drivers-and-finops.md
+    prompt: "What are the three phases of FinOps?"
+    options:
+      - id: a
+        text: "Plan, build and run"
+        explanation: "These are common delivery phases and not the FinOps phases."
+      - id: b
+        text: "Tag, scale and delete"
+        explanation: "These are single actions, not phases."
+      - id: c
+        text: "Inform, optimize and operate"
+        explanation: "Correct. The phases repeat as a loop."
+      - id: d
+        text: "Request, limit and quota"
+        explanation: "These are Kubernetes resource settings."
+    correct_option: c
+    explanation: "Correct. The phases repeat as a loop."
+
+  - id: ats040-final-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the OCI specifications"
+    source_readings:
+      - sections/section-020/module-04/course-01-open-standards-and-the-oci-specifications.md
+    prompt: "Which three specifications does the Open Container Initiative maintain?"
+    options:
+      - id: a
+        text: "Build, test and deploy"
+        explanation: "These are pipeline stages."
+      - id: b
+        text: "CRI, CNI and CSI"
+        explanation: "These are Kubernetes interfaces, not OCI specifications."
+      - id: c
+        text: "Image, runtime and distribution"
+        explanation: "Correct. They define the image format, running a container and the registry API."
+      - id: d
+        text: "Pod, Service and Ingress"
+        explanation: "These are Kubernetes API objects."
+    correct_option: c
+    explanation: "Correct. They define the image format, running a container and the registry API."
+
+  - id: ats040-final-q20
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the two forms"
+    source_readings:
+      - sections/section-020/module-05/course-01-the-serverless-model.md
+    prompt: "Which pair names the two forms of serverless?"
+    options:
+      - id: a
+        text: "Build as a Service and Test as a Service"
+        explanation: "These are not standard terms."
+      - id: b
+        text: "Containers as a Service and Virtual machines as a Service"
+        explanation: "These are infrastructure models."
+      - id: c
+        text: "Functions as a Service and Backend as a Service"
+        explanation: "Correct. One runs code on a trigger and the other replaces backend parts with managed services."
+      - id: d
+        text: "Platform as a Service and Software as a Service"
+        explanation: "These are cloud service models, not the two serverless forms."
+    correct_option: c
+    explanation: "Correct. One runs code on a trigger and the other replaces backend parts with managed services."
+
+  - id: ats040-final-q21
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match the role"
+    source_readings:
+      - sections/section-020/module-06/course-01-the-main-cloud-native-roles.md
+    prompt: "Who builds a self-service tool that lets teams create namespaces and deploy?"
+    options:
+      - id: a
+        text: "Data engineer"
+        explanation: "This role runs data pipelines."
+      - id: b
+        text: "Developer"
+        explanation: "Developers write the application code."
+      - id: c
+        text: "Platform engineer, who builds the shared platform for developers"
+        explanation: "Correct. The platform is a product for developers."
+      - id: d
+        text: "Security engineer"
+        explanation: "Security builds scanning and policy."
+    correct_option: c
+    explanation: "Correct. The platform is a product for developers."
+
+  - id: ats040-final-q22
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order the stages"
+    source_readings:
+      - sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+    prompt: "Which order lists the CNCF maturity stages from earliest to latest?"
+    options:
+      - id: a
+        text: "Alpha, Beta, Stable"
+        explanation: "These are Kubernetes feature stages."
+      - id: b
+        text: "Incubating, Sandbox, Graduated"
+        explanation: "Sandbox is the earliest stage."
+      - id: c
+        text: "Sandbox, Incubating, Graduated"
+        explanation: "Correct."
+      - id: d
+        text: "Graduated, Incubating, Sandbox"
+        explanation: "This is the reverse order."
+    correct_option: c
+    explanation: "Correct."

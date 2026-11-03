@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Use A RuntimeClass And A Persistent Volume (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-020-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: runtimeclass
+      description: "RuntimeClass standard-runc has the handler runc"
+      type: file
+      source: validation/validate-runtimeclass.sh
+      hint: "Use apiVersion node.k8s.io/v1, kind RuntimeClass and handler runc."
+    - name: claim-spec
+      description: "PersistentVolumeClaim logbook requests 100Mi, ReadWriteOnce, StorageClass standard"
+      type: file
+      source: validation/validate-claim-spec.sh
+      hint: "Set accessModes, storageClassName and resources.requests.storage."
+    - name: pod-spec
+      description: "Pod recorder uses RuntimeClass standard-runc and mounts logbook at /data"
+      type: file
+      source: validation/validate-pod-spec.sh
+      hint: "Set spec.runtimeClassName, a persistentVolumeClaim volume and a volumeMount at /data."
+    - name: bound
+      description: "The claim is Bound and the pod is Running"
+      type: file
+      source: validation/validate-bound.sh
+      hint: "Wait for the pod to be scheduled; the class binds the claim on first use."
+    - name: file
+      description: "The file /data/entry.txt in the pod contains recorded"
+      type: file
+      source: validation/validate-file.sh
+      hint: "The container command must write the word recorded to /data/entry.txt."
+
+teardown:
+  keepCluster: false

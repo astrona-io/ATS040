@@ -1,0 +1,237 @@
+# Knowledge check for module 04 of section 020. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-020-m04
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Open Standards And Interfaces"
+placement:
+  position: after
+  reading: sections/section-020/module-04/course-05-summary.md
+questions:
+- id: ats040-020-m04-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define an open standard"
+  source_readings:
+  - sections/section-020/module-04/course-01-open-standards-and-the-oci-specifications.md
+  prompt: "What is the main benefit of an open standard such as the OCI image specification?"
+  options:
+  - id: a
+    text: "It removes the need for a container runtime."
+    explanation: "Images still need a runtime."
+  - id: b
+    text: "Any compliant tool can build, store or run the image, so components can be swapped."
+    explanation: "Correct. This is portability and choice."
+  - id: c
+    text: "It makes images smaller than any other format."
+    explanation: "The specification does not promise a size."
+  - id: d
+    text: "It makes every registry free."
+    explanation: "Standards do not set prices."
+  correct_option: b
+  explanation: "Correct. This is portability and choice."
+- id: ats040-020-m04-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the OCI specifications"
+  source_readings:
+  - sections/section-020/module-04/course-01-open-standards-and-the-oci-specifications.md
+  prompt: "Which three specifications does the Open Container Initiative maintain?"
+  options:
+  - id: a
+    text: "Build, test and deploy"
+    explanation: "These are pipeline stages."
+  - id: b
+    text: "CRI, CNI and CSI"
+    explanation: "These are Kubernetes interfaces, not OCI specifications."
+  - id: c
+    text: "Image, runtime and distribution"
+    explanation: "Correct. They define the image format, running a container and the registry API."
+  - id: d
+    text: "Pod, Service and Ingress"
+    explanation: "These are Kubernetes API objects."
+  correct_option: c
+  explanation: "Correct. They define the image format, running a container and the registry API."
+- id: ats040-020-m04-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Tell a tag from a digest"
+  source_readings:
+  - sections/section-020/module-04/course-01-open-standards-and-the-oci-specifications.md
+  prompt: "A team needs to be sure that every node runs exactly the same bytes of an image. What should the pod spec use?"
+  options:
+  - id: a
+    text: "The image size"
+    explanation: "Size is not an identifier."
+  - id: b
+    text: "The tag latest"
+    explanation: "A tag can move to other content."
+  - id: c
+    text: "A tag with a version number"
+    explanation: "A version tag can also be moved by a maintainer."
+  - id: d
+    text: "The image digest, written as name@sha256:..."
+    explanation: "Correct. A digest is the hash of the content."
+  correct_option: d
+  explanation: "Correct. A digest is the hash of the content."
+- id: ats040-020-m04-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Place runc in the stack"
+  source_readings:
+  - sections/section-020/module-04/course-02-container-runtime-interface-and-runtime-classes.md
+  prompt: "Which component does the kubelet call through the CRI, and which one creates the container process?"
+  options:
+  - id: a
+    text: "The kubelet calls containerd or CRI-O, which calls runc to create the process."
+    explanation: "Correct. The first is a high-level runtime and runc is a low-level OCI runtime."
+  - id: b
+    text: "The kubelet calls Docker, which calls the scheduler."
+    explanation: "The kubelet no longer has built-in Docker support, and the scheduler does not run containers."
+  - id: c
+    text: "The kubelet creates the process itself."
+    explanation: "It delegates this to the runtime."
+  - id: d
+    text: "The kubelet calls runc, and containerd creates the process."
+    explanation: "The order is reversed."
+  correct_option: a
+  explanation: "Correct. The first is a high-level runtime and runc is a low-level OCI runtime."
+- id: ats040-020-m04-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain the dockershim removal"
+  source_readings:
+  - sections/section-020/module-04/course-02-container-runtime-interface-and-runtime-classes.md
+  prompt: "Kubernetes 1.24 removed dockershim. What does this mean for an image built with Docker?"
+  options:
+  - id: a
+    text: "It no longer works in Kubernetes."
+    explanation: "It still works."
+  - id: b
+    text: "It still runs, because it follows the OCI image specification and the runtime is containerd or CRI-O."
+    explanation: "Correct. Only the built-in Docker runtime support was removed."
+  - id: c
+    text: "It must be rebuilt with another tool."
+    explanation: "It is an OCI image and needs no rebuild."
+  - id: d
+    text: "It can only run on Docker hosts."
+    explanation: "OCI images run on any compliant runtime."
+  correct_option: b
+  explanation: "Correct. Only the built-in Docker runtime support was removed."
+- id: ats040-020-m04-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Use a RuntimeClass"
+  source_readings:
+  - sections/section-020/module-04/course-02-container-runtime-interface-and-runtime-classes.md
+  prompt: "Which pod field selects a RuntimeClass?"
+  options:
+  - id: a
+    text: "spec.runtimeHandler"
+    explanation: "The handler is a field of the RuntimeClass object."
+  - id: b
+    text: "metadata.runtime"
+    explanation: "This field does not exist."
+  - id: c
+    text: "spec.runtimeClassName"
+    explanation: "Correct. It names the RuntimeClass, whose handler names the runtime configuration."
+  - id: d
+    text: "spec.containers[].runtime"
+    explanation: "Runtime is chosen per pod and not per container."
+  correct_option: c
+  explanation: "Correct. It names the RuntimeClass, whose handler names the runtime configuration."
+- id: ats040-020-m04-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Describe the CNI job"
+  source_readings:
+  - sections/section-020/module-04/course-03-container-network-and-storage-interfaces.md
+  prompt: "What does a CNI plugin do when a pod starts?"
+  options:
+  - id: a
+    text: "It schedules the pod on a node."
+    explanation: "The scheduler does this."
+  - id: b
+    text: "It pulls the image from the registry."
+    explanation: "The runtime does this."
+  - id: c
+    text: "It creates the volume on the storage system."
+    explanation: "This is the job of a CSI driver."
+  - id: d
+    text: "It connects the pod sandbox to the network and assigns an IP address."
+    explanation: "Correct. The runtime calls the plugin with ADD."
+  correct_option: d
+  explanation: "Correct. The runtime calls the plugin with ADD."
+- id: ats040-020-m04-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Find the enforcement point"
+  source_readings:
+  - sections/section-020/module-04/course-03-container-network-and-storage-interfaces.md
+  prompt: "A cluster uses a CNI plugin that does not support network policy. A NetworkPolicy object is created. What happens?"
+  options:
+  - id: a
+    text: "The object is stored but nothing enforces it."
+    explanation: "Correct. Enforcement is the job of the plugin."
+  - id: b
+    text: "All pod traffic is blocked."
+    explanation: "Nothing blocks traffic without an enforcing plugin."
+  - id: c
+    text: "The API server rejects it."
+    explanation: "The API accepts the object."
+  - id: d
+    text: "The kubelet enforces it."
+    explanation: "The CNI plugin enforces policy."
+  correct_option: a
+  explanation: "Correct. Enforcement is the job of the plugin."
+- id: ats040-020-m04-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Follow a claim"
+  source_readings:
+  - sections/section-020/module-04/course-03-container-network-and-storage-interfaces.md
+  prompt: "A StorageClass uses volumeBindingMode WaitForFirstConsumer. A PersistentVolumeClaim is created and no pod uses it. What status does the claim show?"
+  options:
+  - id: a
+    text: "Lost"
+    explanation: "Lost means a bound volume disappeared."
+  - id: b
+    text: "Pending"
+    explanation: "Correct. Binding waits until a pod that uses the claim is scheduled."
+  - id: c
+    text: "Bound"
+    explanation: "The volume is not created before a pod uses the claim."
+  - id: d
+    text: "Failed"
+    explanation: "This is not an error."
+  correct_option: b
+  explanation: "Correct. Binding waits until a pod that uses the claim is scheduled."
+- id: ats040-020-m04-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Match the standard to the job"
+  source_readings:
+  - sections/section-020/module-04/course-04-mesh-event-and-telemetry-standards.md
+  prompt: "Which standard describes an event with attributes such as id, source, specversion and type?"
+  options:
+  - id: a
+    text: "OpenTelemetry"
+    explanation: "It describes telemetry data."
+  - id: b
+    text: "Gateway API"
+    explanation: "It describes traffic routing."
+  - id: c
+    text: "CloudEvents"
+    explanation: "Correct. It is the CNCF specification for event data."
+  - id: d
+    text: "OCI distribution"
+    explanation: "It describes the registry API."
+  correct_option: c
+  explanation: "Correct. It is the CNCF specification for event data."

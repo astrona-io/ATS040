@@ -9,7 +9,7 @@ Every Kubernetes manifest begins with `apiVersion`. That one line is a promise a
 
 This module explains how Kubernetes labels the maturity of an API as alpha, beta or stable, what each label promises, and how the project deprecates and removes versions on a published schedule. It shows how to see which versions a cluster serves, how the API server warns about deprecated use, and how to migrate a manifest to the current version. The same rules apply to custom resources that projects add, so the module also explains why a project's own API version tells you how much to depend on it.
 
-The module has three deep-dive parts. The first part covers maturity levels and feature gates. The second part covers the deprecation policy and how to find deprecated use. The third part covers migrating manifests. A graded lab at the end gives three manifests that use removed API versions and asks you to migrate them.
+The module has four deep-dive parts. The first part covers maturity levels and feature gates. The second part covers the deprecation policy and how to find deprecated use. The third part covers migrating manifests. The fourth part covers custom resource versions and conversion. A graded lab at the end gives three manifests that use removed API versions and asks you to migrate them.
 
 ## Learning objectives
 

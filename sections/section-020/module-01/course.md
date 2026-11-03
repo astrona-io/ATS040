@@ -9,7 +9,7 @@ A cloud native application is built so that the platform can start, stop, move a
 
 This module explains the design rules and the Kubernetes mechanisms that enforce them. It starts with loose coupling, microservice tradeoffs and the settings that make a Deployment resilient: replicas, health probes, a PodDisruptionBudget, resource requests and configuration that lives outside the image. It then moves to workloads that run only when there is work to do. Serverless platforms start containers on demand. Event-driven systems pass work through queues, and they must handle retries and duplicates, so the module ends with Kubernetes Jobs, CronJobs and idempotent processing.
 
-The module has two deep-dive parts. The first one covers boundaries, resilience and replaceable workloads. The second one covers serverless execution, event delivery, retries and idempotency. Each part ends with a graded lab on the playground cluster.
+The module has four deep-dive parts. The first one covers boundaries, resilience and replaceable workloads. The second one covers serverless execution, event delivery, retries and idempotency. The third one covers the twelve-factor methodology and immutable infrastructure. The fourth one covers container design patterns such as the sidecar. The first two parts each end with a graded lab on the playground cluster.
 
 ## Learning objectives
 

@@ -34,6 +34,55 @@ sections:
     - Metrics, Logs And Traces
     - Instrumentation And Telemetry Pipelines
     - Service Objectives, Budgets And Alerts
+    - Kubernetes Built-In Observability
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-02
+    title: OpenTelemetry, Tracing And Logs
+    objectives:
+    - Explain the OpenTelemetry API, SDK, Collector and OTLP.
+    - Describe distributed tracing, context propagation and sampling.
+    - Describe how logs are collected in Kubernetes.
+    - Configure telemetry for a workload and a Collector pipeline.
+    outline:
+    - Signals, Instrumentation And OTLP
+    - Collector And Pipelines
+    - Distributed Tracing And Sampling
+    - Logs In Kubernetes
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-03
+    title: Prometheus And PromQL
+    objectives:
+    - Describe the Prometheus architecture and data model.
+    - Choose between counter, gauge, histogram and summary.
+    - Write PromQL queries for rates and percentiles.
+    - Write recording and alerting rules and describe Alertmanager and dashboards.
+    outline:
+    - Architecture And Data Model
+    - Metric Types And Exposition
+    - PromQL
+    - Alerting, Alertmanager And Dashboards
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-04
+    title: Cloud Cost Management
+    objectives:
+    - Name the main cost drivers of a cluster.
+    - Explain requests, usage, quota and rightsizing.
+    - Allocate cost with labels and describe cost tools.
+    - Compare purchasing options and scaling levers.
+    outline:
+    - Cost Drivers And FinOps
+    - Requests, Usage, Quota And Rightsizing
+    - Allocation, Labels And Cost Tools
+    - Purchasing Options And Scaling Levers
     playground: true
     module_lab: true
     labs: 1
@@ -54,6 +103,8 @@ sections:
     outline:
     - Boundaries, Resilience And Elasticity
     - Serverless And Event-Driven Workloads
+    - Twelve-Factor And Immutable Infrastructure
+    - Container Design Patterns
     playground: true
     module_lab: true
     labs: 2
@@ -68,6 +119,8 @@ sections:
     outline:
     - Standards And Implementation Boundaries
     - Matching Projects To Platform Jobs
+    - The CNCF Landscape By Category
+    - Evaluating And Adopting A Project
     playground: true
     module_lab: true
     labs: 1
@@ -82,6 +135,55 @@ sections:
     - Horizontal Pod Autoscaler
     - Vertical And Cluster Scaling
     - Event-Driven Scaling And Behavior
+    - Troubleshooting Autoscaling
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-04
+    title: Open Standards And Interfaces
+    objectives:
+    - Explain the value of open standards and the OCI specifications.
+    - Describe the CRI, runtime classes, CNI and CSI.
+    - Name the mesh, event and telemetry standards.
+    - Use a RuntimeClass and a persistent volume.
+    outline:
+    - Open Standards And The OCI Specifications
+    - Container Runtime Interface And Runtime Classes
+    - Container Network And Storage Interfaces
+    - Mesh, Event And Telemetry Standards
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-05
+    title: Serverless And Event-Driven Platforms
+    objectives:
+    - Define serverless, Functions as a Service and Backend as a Service.
+    - Describe Knative Serving and Eventing and KEDA.
+    - Create Jobs and CronJobs with limits.
+    - Choose between serverless, containers and virtual machines.
+    outline:
+    - The Serverless Model
+    - Knative Serving And Eventing
+    - Scale To Zero, Event-Driven Scaling And Batch Workloads
+    - Choosing Serverless, Containers Or Virtual Machines
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-06
+    title: Cloud Native Roles And Personas
+    objectives:
+    - Name the main cloud native roles and their responsibilities.
+    - Explain platform engineering and golden paths.
+    - Map personas to RBAC Roles and test access.
+    - Describe DevOps and site reliability engineering practices.
+    outline:
+    - The Main Cloud Native Roles
+    - Platform Engineering And Team Topologies
+    - Role-Based Access Control For Personas
+    - DevOps And Site Reliability Engineering Practices
     playground: true
     module_lab: true
     labs: 1
@@ -102,6 +204,8 @@ sections:
     outline:
     - Governance, Maturity And Licenses
     - Issues, Reviews And Working Groups
+    - Licenses In Depth
+    - Judging Project Health
     playground: true
     module_lab: true
     labs: 1
@@ -117,6 +221,23 @@ sections:
     - API Maturity Levels And Feature Gates
     - Deprecation Policy And Finding Deprecated Use
     - Migrating Manifests To Current Versions
+    - Custom Resource Versions And Conversion
+    playground: true
+    module_lab: true
+    labs: 1
+    diagrams: []
+  - id: module-03
+    title: CNCF Structure And Kubernetes Governance
+    objectives:
+    - Describe the CNCF bodies and the project lifecycle.
+    - Describe SIGs, working groups, KEPs and OWNERS files.
+    - Explain the release cycle and version support.
+    - Describe the Code of Conduct and ways to take part.
+    outline:
+    - CNCF Structure And The Project Lifecycle
+    - Kubernetes Governance, SIGs And KEPs
+    - The Release Cycle And Version Support
+    - The Code Of Conduct And Taking Part
     playground: true
     module_lab: true
     labs: 1

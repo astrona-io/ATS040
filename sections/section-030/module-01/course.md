@@ -9,7 +9,7 @@ A cloud native project is more than its code. Decisions about its direction, its
 
 This module explains how open source governance works in the cloud native ecosystem. It covers what the CNCF maturity levels say and do not say, how licenses and contribution rules differ, and how a contribution moves from an issue through review to a decision. It uses the Kubernetes community as the main example, with its Special Interest Groups and working groups. The playground lets you practice the evidence-keeping and review habits on a running cluster: you record the facts about a dependency, and you review a change with `kubectl diff` before it is applied.
 
-The module has two deep-dive parts. The first part covers governance, maturity levels, licenses and contribution rules. The second part covers the issue, change and review workflow and how to find the right group. A graded lab at the end walks through one small contribution cycle on a live cluster.
+The module has four deep-dive parts. The first part covers governance, maturity levels, licenses and contribution rules. The second part covers the issue, change and review workflow and how to find the right group. The third part covers licenses in depth. The fourth part covers how to judge the health of a project. A graded lab after the fourth part walks through one small contribution cycle on a live cluster.
 
 ## Learning objectives
 

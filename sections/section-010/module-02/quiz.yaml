@@ -1,0 +1,237 @@
+# Knowledge check for module 02 of section 010. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-010-m02
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "OpenTelemetry, Tracing And Logs"
+placement:
+  position: after
+  reading: sections/section-010/module-02/course-05-summary.md
+questions:
+- id: ats040-010-m02-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Explain what OpenTelemetry does"
+  source_readings:
+  - sections/section-010/module-02/course-01-signals-instrumentation-and-otlp.md
+  prompt: "Which statement describes OpenTelemetry correctly?"
+  options:
+  - id: a
+    text: "It stores metrics and draws dashboards."
+    explanation: "Storage and dashboards belong to a back end such as Prometheus or Grafana."
+  - id: b
+    text: "It defines libraries, a protocol and a Collector that produce and move telemetry."
+    explanation: "Correct. It does not store or display telemetry."
+  - id: c
+    text: "It replaces Kubernetes events."
+    explanation: "Events are API objects. OpenTelemetry is a telemetry standard."
+  - id: d
+    text: "It is a log rotation tool for nodes."
+    explanation: "Log rotation is done by the kubelet and the runtime."
+  correct_option: b
+  explanation: "Correct. It does not store or display telemetry."
+- id: ats040-010-m02-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Separate the API from the SDK"
+  source_readings:
+  - sections/section-010/module-02/course-01-signals-instrumentation-and-otlp.md
+  prompt: "What is the job of the OpenTelemetry SDK, as opposed to the API?"
+  options:
+  - id: a
+    text: "It receives OTLP and forwards it to back ends."
+    explanation: "That is the Collector."
+  - id: b
+    text: "It stores traces for later queries."
+    explanation: "Trace stores are back ends such as Jaeger or Tempo."
+  - id: c
+    text: "It implements the API and decides how to sample, batch and export data."
+    explanation: "Correct. The API only defines the calls that code makes."
+  - id: d
+    text: "It defines the calls that library code makes to start spans."
+    explanation: "That is the API."
+  correct_option: c
+  explanation: "Correct. The API only defines the calls that code makes."
+- id: ats040-010-m02-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Use the right OTLP port"
+  source_readings:
+  - sections/section-010/module-02/course-01-signals-instrumentation-and-otlp.md
+  prompt: "An SDK is set to OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf. Which default Collector port should the endpoint use?"
+  options:
+  - id: a
+    text: "4317"
+    explanation: "Port 4317 is the default for OTLP over gRPC."
+  - id: b
+    text: "9090"
+    explanation: "Port 9090 is the default port of Prometheus."
+  - id: c
+    text: "8080"
+    explanation: "This is not an OTLP default."
+  - id: d
+    text: "4318"
+    explanation: "Correct. OTLP over HTTP uses 4318 by default, with paths such as /v1/traces."
+  correct_option: d
+  explanation: "Correct. OTLP over HTTP uses 4318 by default, with paths such as /v1/traces."
+- id: ats040-010-m02-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the Collector building blocks"
+  source_readings:
+  - sections/section-010/module-02/course-02-collector-and-pipelines.md
+  prompt: "Which list names the four building blocks of an OpenTelemetry Collector configuration?"
+  options:
+  - id: a
+    text: "Receivers, processors, exporters and pipelines"
+    explanation: "Correct. A pipeline connects the other three for one signal."
+  - id: b
+    text: "Spans, metrics, logs and baggage"
+    explanation: "These are data types, not configuration blocks."
+  - id: c
+    text: "Sources, filters, sinks and routes"
+    explanation: "These are not the names used in the Collector configuration."
+  - id: d
+    text: "Agents, gateways, sidecars and daemons"
+    explanation: "These are deployment patterns, not configuration blocks."
+  correct_option: a
+  explanation: "Correct. A pipeline connects the other three for one signal."
+- id: ats040-010-m02-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose agent or gateway"
+  source_readings:
+  - sections/section-010/module-02/course-02-collector-and-pipelines.md
+  prompt: "Which task fits a gateway Collector better than a node agent?"
+  options:
+  - id: a
+    text: "Receiving OTLP from pods on the same node."
+    explanation: "This is the agent role."
+  - id: b
+    text: "Tail sampling of complete traces."
+    explanation: "Correct. It needs a central view of all spans of a trace."
+  - id: c
+    text: "Reading log files of the node."
+    explanation: "A node agent reads node files."
+  - id: d
+    text: "Adding the pod name to local telemetry."
+    explanation: "A node agent does this close to the workload."
+  correct_option: b
+  explanation: "Correct. It needs a central view of all spans of a trace."
+- id: ats040-010-m02-q06
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Read a traceparent header"
+  source_readings:
+  - sections/section-010/module-02/course-03-distributed-tracing-and-sampling.md
+  prompt: "What does the traceparent header carry?"
+  options:
+  - id: a
+    text: "The log level and the service name."
+    explanation: "These are not in the header."
+  - id: b
+    text: "The sampling ratio of the whole system."
+    explanation: "Only a flag for this trace is carried."
+  - id: c
+    text: "The trace ID, the parent span ID and the trace flags."
+    explanation: "Correct, with a version field in front."
+  - id: d
+    text: "The user name and the password."
+    explanation: "The header carries no credentials."
+  correct_option: c
+  explanation: "Correct, with a version field in front."
+- id: ats040-010-m02-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Diagnose a split trace"
+  source_readings:
+  - sections/section-010/module-02/course-03-distributed-tracing-and-sampling.md
+  prompt: "A request goes through a message proxy that drops unknown headers. What is the result in the trace back end?"
+  options:
+  - id: a
+    text: "The spans are merged into one longer span."
+    explanation: "Spans are not merged."
+  - id: b
+    text: "Nothing changes."
+    explanation: "Without the header the next service starts a new trace."
+  - id: c
+    text: "The trace is sampled at 100 percent."
+    explanation: "Sampling does not change."
+  - id: d
+    text: "The trace is split into two unconnected traces."
+    explanation: "Correct. The next service cannot find the parent context."
+  correct_option: d
+  explanation: "Correct. The next service cannot find the parent context."
+- id: ats040-010-m02-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Choose a sampling method"
+  source_readings:
+  - sections/section-010/module-02/course-03-distributed-tracing-and-sampling.md
+  prompt: "A team wants to keep every trace that contains an error and only 1 percent of the others. Which method can do this?"
+  options:
+  - id: a
+    text: "Tail sampling in a gateway Collector"
+    explanation: "Correct. The decision is made after the trace is complete."
+  - id: b
+    text: "Raising the batch size of the processor"
+    explanation: "Batching does not choose which traces to keep."
+  - id: c
+    text: "Head sampling with traceidratio 0.01"
+    explanation: "Head sampling decides before the outcome is known."
+  - id: d
+    text: "Setting OTEL_TRACES_SAMPLER to always_on"
+    explanation: "This keeps every trace and costs the most."
+  correct_option: a
+  explanation: "Correct. The decision is made after the trace is complete."
+- id: ats040-010-m02-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Read the log of a crashed container"
+  source_readings:
+  - sections/section-010/module-02/course-04-logs-in-kubernetes.md
+  prompt: "A pod is in CrashLoopBackOff. Which command shows the log of the instance that crashed?"
+  options:
+  - id: a
+    text: "kubectl logs <pod>"
+    explanation: "This shows the current instance, which has just restarted."
+  - id: b
+    text: "kubectl logs <pod> --previous"
+    explanation: "Correct. It shows the log of the previous container instance."
+  - id: c
+    text: "kubectl get events <pod>"
+    explanation: "Events are not the application log."
+  - id: d
+    text: "kubectl describe logs <pod>"
+    explanation: "There is no such command."
+  correct_option: b
+  explanation: "Correct. It shows the log of the previous container instance."
+- id: ats040-010-m02-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick a collection pattern"
+  source_readings:
+  - sections/section-010/module-02/course-04-logs-in-kubernetes.md
+  prompt: "An application cannot be changed and writes to stdout. What is the most common way to collect its logs?"
+  options:
+  - id: a
+    text: "Store the logs in the Pod spec."
+    explanation: "A Pod spec does not hold logs."
+  - id: b
+    text: "Add a push library to the code."
+    explanation: "The code cannot be changed."
+  - id: c
+    text: "Run a node agent as a DaemonSet that reads the node log files."
+    explanation: "Correct. The application needs no change."
+  - id: d
+    text: "Run kubectl logs in a loop on a laptop."
+    explanation: "This is not a collection system and it loses lines."
+  correct_option: c
+  explanation: "Correct. The application needs no change."

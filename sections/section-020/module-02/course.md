@@ -9,7 +9,7 @@ Kubernetes does not run containers, configure networks or store data by itself. 
 
 This module explains which standards exist, what each one defines and where it sits in the path from a pod specification to a running container. It separates three things that people often mix up: a specification, an implementation of it and a managed service that hosts an implementation. It then shows how to match a platform job, such as collecting metrics or controlling traffic, to a project category, and how projects add their own objects to the Kubernetes API with custom resources.
 
-The module has two deep-dive parts. The first part covers open standards and the boundary between specification, implementation and managed service. The second part covers project roles and the extension mechanism that most projects use. A graded lab at the end reads real values from the cluster and creates a custom resource type.
+The module has four deep-dive parts. The first part covers open standards and the boundary between specification, implementation and managed service. The second part covers project roles and the extension mechanism that most projects use. The third part covers the landscape by category. The fourth part covers how to evaluate and adopt a project. A graded lab after the fourth part reads real values from the cluster and creates a custom resource type.
 
 ## Learning objectives
 

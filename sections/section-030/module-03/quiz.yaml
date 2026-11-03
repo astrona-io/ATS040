@@ -1,0 +1,237 @@
+# Knowledge check for module 03 of section 030. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-030-m03
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "CNCF Structure And Kubernetes Governance"
+placement:
+  position: after
+  reading: sections/section-030/module-03/course-05-summary.md
+questions:
+- id: ats040-030-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the CNCF body"
+  source_readings:
+  - sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+  prompt: "Which CNCF body sets the technical direction and admits projects?"
+  options:
+  - id: a
+    text: "Governing Board"
+    explanation: "It handles business matters such as budget and marketing."
+  - id: b
+    text: "Technical Oversight Committee (TOC)"
+    explanation: "Correct."
+  - id: c
+    text: "End User Community"
+    explanation: "It gives feedback from users."
+  - id: d
+    text: "Kubernetes Steering Committee"
+    explanation: "It governs the Kubernetes project, not the CNCF."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-030-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Order the stages"
+  source_readings:
+  - sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+  prompt: "Which order lists the CNCF maturity stages from earliest to latest?"
+  options:
+  - id: a
+    text: "Alpha, Beta, Stable"
+    explanation: "These are Kubernetes feature stages."
+  - id: b
+    text: "Incubating, Sandbox, Graduated"
+    explanation: "Sandbox is the earliest stage."
+  - id: c
+    text: "Sandbox, Incubating, Graduated"
+    explanation: "Correct."
+  - id: d
+    text: "Graduated, Incubating, Sandbox"
+    explanation: "This is the reverse order."
+  correct_option: c
+  explanation: "Correct."
+- id: ats040-030-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read the meaning"
+  source_readings:
+  - sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+  prompt: "A project is Graduated. What does this show?"
+  options:
+  - id: a
+    text: "It is owned by one company."
+    explanation: "A graduated project needs neutral ownership."
+  - id: b
+    text: "Its API will never change."
+    explanation: "Maturity does not promise API stability."
+  - id: c
+    text: "It is the best choice for every use."
+    explanation: "Fit depends on the need."
+  - id: d
+    text: "The community and process are mature, with adopters and a security audit."
+    explanation: "Correct."
+  correct_option: d
+  explanation: "Correct."
+- id: ats040-030-m03-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know the TAGs"
+  source_readings:
+  - sections/section-030/module-03/course-01-cncf-structure-and-the-project-lifecycle.md
+  prompt: "What do the CNCF Technical Advisory Groups do?"
+  options:
+  - id: a
+    text: "They bring expert help in an area such as security or observability and advise the TOC."
+    explanation: "Correct."
+  - id: b
+    text: "They write the code of every project."
+    explanation: "Maintainers write the code."
+  - id: c
+    text: "They run the KubeCon events."
+    explanation: "Staff run the events."
+  - id: d
+    text: "They elect the Kubernetes Steering Committee."
+    explanation: "The Kubernetes community elects it."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-030-m03-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Match the group"
+  source_readings:
+  - sections/section-030/module-03/course-02-kubernetes-governance-sigs-and-keps.md
+  prompt: "Which Kubernetes group owns an area such as networking or storage, with regular meetings and a charter?"
+  options:
+  - id: a
+    text: "Working group"
+    explanation: "A working group coordinates a topic for a limited time."
+  - id: b
+    text: "Special Interest Group (SIG)"
+    explanation: "Correct."
+  - id: c
+    text: "Steering Committee"
+    explanation: "It sets governance, not technical areas."
+  - id: d
+    text: "User group"
+    explanation: "It is a community around a use case."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-030-m03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "State what a KEP is"
+  source_readings:
+  - sections/section-030/module-03/course-02-kubernetes-governance-sigs-and-keps.md
+  prompt: "What is a Kubernetes Enhancement Proposal?"
+  options:
+  - id: a
+    text: "A vote of the Steering Committee."
+    explanation: "A KEP is reviewed by the owning SIG."
+  - id: b
+    text: "A security fix that is released on its own."
+    explanation: "This is a patch release."
+  - id: c
+    text: "A design document for a large change that tracks a feature through alpha, beta and stable."
+    explanation: "Correct."
+  - id: d
+    text: "A list of removed APIs."
+    explanation: "This is a deprecation guide."
+  correct_option: c
+  explanation: "Correct."
+- id: ats040-030-m03-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read the labels"
+  source_readings:
+  - sections/section-030/module-03/course-02-kubernetes-governance-sigs-and-keps.md
+  prompt: "Which labels does a change need before the bot merges it in a Kubernetes repository?"
+  options:
+  - id: a
+    text: "alpha and beta"
+    explanation: "These describe feature stages."
+  - id: b
+    text: "signed and sealed"
+    explanation: "These are not labels."
+  - id: c
+    text: "ready and merged"
+    explanation: "These are not the labels."
+  - id: d
+    text: "lgtm and approved"
+    explanation: "Correct. A reviewer gives lgtm and an approver gives approved."
+  correct_option: d
+  explanation: "Correct. A reviewer gives lgtm and an approver gives approved."
+- id: ats040-030-m03-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Count the releases"
+  source_readings:
+  - sections/section-030/module-03/course-03-the-release-cycle-and-version-support.md
+  prompt: "How many minor releases does Kubernetes make per year?"
+  options:
+  - id: a
+    text: "Three"
+    explanation: "Correct."
+  - id: b
+    text: "Twelve"
+    explanation: "Patch releases are more frequent, not minor releases."
+  - id: c
+    text: "One"
+    explanation: "There are more."
+  - id: d
+    text: "Two"
+    explanation: "There are more."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-030-m03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Check the support"
+  source_readings:
+  - sections/section-030/module-03/course-03-the-release-cycle-and-version-support.md
+  prompt: "Which Kubernetes versions receive patch releases?"
+  options:
+  - id: a
+    text: "Only the latest minor version"
+    explanation: "Three are maintained."
+  - id: b
+    text: "The three most recent minor versions"
+    explanation: "Correct."
+  - id: c
+    text: "All versions that were ever released"
+    explanation: "Old versions reach end of life."
+  - id: d
+    text: "Only versions with a major number of 2 or higher"
+    explanation: "The major number is 1."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-030-m03-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Apply the Code of Conduct"
+  source_readings:
+  - sections/section-030/module-03/course-04-code-of-conduct-and-taking-part.md
+  prompt: "A participant is harassed in a project chat. What should happen?"
+  options:
+  - id: a
+    text: "The maintainer posts the report in public."
+    explanation: "Reports are handled in confidence."
+  - id: b
+    text: "Nothing, because chat is informal."
+    explanation: "The Code of Conduct applies to chat."
+  - id: c
+    text: "The behavior is reported to the Code of Conduct Committee, which investigates in confidence."
+    explanation: "Correct."
+  - id: d
+    text: "The project is removed from the CNCF."
+    explanation: "The consequence applies to the person."
+  correct_option: c
+  explanation: "Correct."

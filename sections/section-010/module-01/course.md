@@ -11,7 +11,7 @@ Producing telemetry is only the first step. Instrumentation adds the measurement
 
 Once the data is trustworthy, it supports reliability decisions. A service level indicator (SLI) measures behavior, a service level objective (SLO) sets the target, and the error budget is the failure the target still allows. Alerts built on the rate at which the budget is spent page a person only when users are affected.
 
-The module covers three subjects in order. The first is the three signal types and the properties that decide how useful they are: metric types, structured logs, spans, context propagation, sampling and cardinality. The second is how telemetry gets out of an application: OpenTelemetry components, the Prometheus scrape mechanism, scrape configuration and the path from a scrape to a query. The third is SLIs, SLOs, error budget arithmetic, burn rate and Prometheus recording and alerting rules.
+The module covers three subjects in order. The first is the three signal types and the properties that decide how useful they are: metric types, structured logs, spans, context propagation, sampling and cardinality. The second is how telemetry gets out of an application: OpenTelemetry components, the Prometheus scrape mechanism, scrape configuration and the path from a scrape to a query. The third is SLIs, SLOs, error budget arithmetic, burn rate and Prometheus recording and alerting rules. A fourth part covers the observability that Kubernetes provides without add-ons: container logs, events, conditions, probes and the Metrics Server.
 
 ## Learning objectives
 

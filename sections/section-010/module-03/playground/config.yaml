@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Prometheus And PromQL (PLAYGROUND) - playground environment.
+# Sandbox with Prometheus v3.5.0 in monitoring (scrapes only itself, empty rules file) and the scout, probe and shuttle workloads in starfleet.
+# A clean sandbox with no task, no grading and no `astrona submit`.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-playground-010-03
+  docs:
+    guide: docs/overview.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+      - quay.io/prometheus/prometheus:v3.5.0
+
+bootstrap:
+  manifests:
+    - name: monitoring
+      type: file
+      source: manifests/monitoring.yaml
+    - name: starfleet
+      type: file
+      source: manifests/starfleet.yaml
+  waitFor:
+    - resource: deploy/prometheus
+      namespace: monitoring
+    - resource: deploy/scout
+      namespace: starfleet
+    - resource: deploy/probe
+      namespace: starfleet
+    - resource: deploy/shuttle
+      namespace: starfleet
+
+teardown:
+  keepCluster: false

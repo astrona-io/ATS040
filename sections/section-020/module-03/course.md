@@ -9,7 +9,7 @@ A fixed number of replicas is wrong most of the time. Too few replicas make the 
 
 Kubernetes autoscales in three directions. Horizontal scaling changes the number of pods. Vertical scaling changes the CPU and memory of each pod. Cluster scaling changes the number of nodes that the pods run on. Each direction uses a different controller, reads different signals and has different limits. This module explains the mechanism of each one, then shows how event-driven projects such as KEDA scale on signals that are not CPU, and how scaling behavior is tuned so that replica counts do not oscillate.
 
-The module has three deep-dive parts. The first part covers the Horizontal Pod Autoscaler and the metrics pipeline it depends on. The second part covers vertical and cluster scaling and how they relate to resource requests. The third part covers event-driven scaling and the rules that control how fast replicas change. A graded lab at the end gives a workload that cannot autoscale and asks you to make it scale.
+The module has four deep-dive parts. The first part covers the Horizontal Pod Autoscaler and the metrics pipeline it depends on. The second part covers vertical and cluster scaling and how they relate to resource requests. The third part covers event-driven scaling and the rules that control how fast replicas change. The fourth part covers how to find the cause when autoscaling does not work. A graded lab at the end gives a workload that cannot autoscale and asks you to make it scale.
 
 ## Learning objectives
 

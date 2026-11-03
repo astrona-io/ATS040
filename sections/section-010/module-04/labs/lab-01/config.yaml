@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Budget A Namespace And Right-Size A Workload (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-010-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+    addons:
+      metricsServer: true
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: labels
+      description: "Namespace starfleet has labels team=bridge and cost-center=exploration"
+      type: file
+      source: validation/validate-labels.sh
+      hint: "Use kubectl label namespace starfleet team=bridge cost-center=exploration."
+    - name: quota
+      description: "ResourceQuota compute-budget allows 2 CPU and 2Gi memory of requests, 4Gi of memory limits and 10 pods"
+      type: file
+      source: validation/validate-quota.sh
+      hint: "Set spec.hard requests.cpu, requests.memory, limits.memory and pods."
+    - name: limitrange
+      description: "LimitRange container-defaults sets a default request of 50m CPU and 64Mi memory and a default memory limit of 128Mi"
+      type: file
+      source: validation/validate-limitrange.sh
+      hint: "Use a Container limit with defaultRequest and default."
+    - name: rightsized
+      description: "Container scout requests 100m CPU and 64Mi memory and has a memory limit of 128Mi"
+      type: file
+      source: validation/validate-rightsized.sh
+      hint: "Use kubectl set resources deployment/scout with --requests and --limits."
+    - name: available
+      description: "Deployment scout is available with its new pod"
+      type: file
+      source: validation/validate-available.sh
+      hint: "Wait for the rollout; a quota that is too small blocks new pods."
+
+teardown:
+  keepCluster: false

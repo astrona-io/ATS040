@@ -5,9 +5,9 @@ exam_objectives:
 ---
 # Cloud Native Ecosystem and Principles
 
-This section teaches cloud native design; cloud native ecosystem; autoscaling. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario, and you apply them on a kind cluster.
+This section teaches cloud native design; cloud native ecosystem; autoscaling; open standards and interfaces; serverless and event-driven platforms; cloud native roles. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario, and you apply them on a kind cluster.
 
-You will work through Cloud Native Design, Cloud Native Ecosystem, Autoscaling. Each module introduces its goals, teaches the concepts through examples, offers a playground for free practice and a graded lab, and closes with a summary. The section ends with an integration capstone and a knowledge check.
+You will work through Cloud Native Design, Cloud Native Ecosystem, Autoscaling, Open Standards And Interfaces, Serverless And Event-Driven Platforms, Cloud Native Roles And Personas. Each module introduces its goals, teaches the concepts through examples, offers a playground for free practice and a graded lab, and closes with a summary. The section ends with an integration capstone and a knowledge check.
 
 ## Learning Outcomes
 
@@ -25,3 +25,6 @@ You will work through Cloud Native Design, Cloud Native Ecosystem, Autoscaling. 
 - Distinguish horizontal, vertical and cluster scaling.
 - Explain event-driven scaling, stabilization windows and scaling behavior.
 - Create an autoscaling/v2 HorizontalPodAutoscaler and tune its behavior.
+- Explain OCI, CRI, CNI, CSI and SMI.
+- Explain functions as a service, Knative, CloudEvents and scale to zero.
+- Describe cloud native roles and grant least-privilege access.

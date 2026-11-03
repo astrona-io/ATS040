@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Create A Job And A CronJob With Limits (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-020-05
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: job-spec
+      description: "Job beacon sets backoffLimit 2, activeDeadlineSeconds 120, ttl 3600 and restartPolicy Never"
+      type: file
+      source: validation/validate-job-spec.sh
+      hint: "Set backoffLimit, activeDeadlineSeconds and ttlSecondsAfterFinished in the Job spec, and restartPolicy in the pod template."
+    - name: job-complete
+      description: "Job beacon is complete"
+      type: file
+      source: validation/validate-job-complete.sh
+      hint: "Check the command and the image; read the Job events."
+    - name: cron-schedule
+      description: "CronJob patrol runs every five minutes with concurrencyPolicy Forbid"
+      type: file
+      source: validation/validate-cron-schedule.sh
+      hint: "Set schedule and concurrencyPolicy in the CronJob spec."
+    - name: cron-history
+      description: "CronJob patrol keeps one successful and one failed Job"
+      type: file
+      source: validation/validate-cron-history.sh
+      hint: "Set successfulJobsHistoryLimit and failedJobsHistoryLimit to 1."
+    - name: cron-template
+      description: "Jobs of patrol stop after 60 seconds and do not restart in place"
+      type: file
+      source: validation/validate-cron-template.sh
+      hint: "Set activeDeadlineSeconds in the jobTemplate spec and restartPolicy Never in the pod template."
+
+teardown:
+  keepCluster: false

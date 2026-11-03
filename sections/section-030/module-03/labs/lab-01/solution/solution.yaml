@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-facts
+  namespace: starfleet
+  annotations:
+    owner-sig: sig-release
+data:
+  serverVersion: "__VERSION__"
+  releasesPerYear: "3"
+  supportedMinorVersions: "3"

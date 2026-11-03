@@ -8,11 +8,11 @@ Concept lessons explain each official objective through concrete examples, diagr
 
 | Section | Objective | Modules | Labs | Capstone | Quiz |
 | --- | --- | --- | --- | --- | --- |
-| 010 | Observability | 1 | 1 | 1 | 10 questions |
-| 020 | Cloud Native Ecosystem and Principles | 3 | 4 | 1 | 10 questions |
-| 030 | Cloud Native Community and Collaboration | 2 | 2 | 1 | 10 questions |
+| 010 | Observability | 4 | 4 | 1 | 10 questions |
+| 020 | Cloud Native Ecosystem and Principles | 6 | 7 | 1 | 10 questions |
+| 030 | Cloud Native Community and Collaboration | 3 | 3 | 1 | 10 questions |
 
-The final domain quiz has 15 questions. See [the curriculum map](CURRICULUM.md) for module outcomes. The manifest `astrona.yaml` registers the readings, labs and quizzes in teaching order.
+Each module also has a 10-question quiz. The final domain quiz has 22 questions. See [the curriculum map](CURRICULUM.md) for module outcomes. The manifest `astrona.yaml` registers the readings, labs and quizzes in teaching order.
 
 ## Run A Lab
 

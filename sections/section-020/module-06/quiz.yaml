@@ -1,0 +1,237 @@
+# Knowledge check for module 06 of section 020. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-020-m06
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Cloud Native Roles And Personas"
+placement:
+  position: after
+  reading: sections/section-020/module-06/course-05-summary.md
+questions:
+- id: ats040-020-m06-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Match the role"
+  source_readings:
+  - sections/section-020/module-06/course-01-the-main-cloud-native-roles.md
+  prompt: "Which role defines a target such as 99.9 percent of requests succeed and tracks the error budget?"
+  options:
+  - id: a
+    text: "FinOps practitioner"
+    explanation: "FinOps manages cost."
+  - id: b
+    text: "Site reliability engineer"
+    explanation: "Correct. SRE works with service level objectives and error budgets."
+  - id: c
+    text: "Cluster administrator"
+    explanation: "This role operates the clusters."
+  - id: d
+    text: "Cloud architect"
+    explanation: "The architect designs the system."
+  correct_option: b
+  explanation: "Correct. SRE works with service level objectives and error budgets."
+- id: ats040-020-m06-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Match the role"
+  source_readings:
+  - sections/section-020/module-06/course-01-the-main-cloud-native-roles.md
+  prompt: "Who builds a self-service tool that lets teams create namespaces and deploy?"
+  options:
+  - id: a
+    text: "Data engineer"
+    explanation: "This role runs data pipelines."
+  - id: b
+    text: "Developer"
+    explanation: "Developers write the application code."
+  - id: c
+    text: "Platform engineer, who builds the shared platform for developers"
+    explanation: "Correct. The platform is a product for developers."
+  - id: d
+    text: "Security engineer"
+    explanation: "Security builds scanning and policy."
+  correct_option: c
+  explanation: "Correct. The platform is a product for developers."
+- id: ats040-020-m06-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Describe DevOps"
+  source_readings:
+  - sections/section-020/module-06/course-01-the-main-cloud-native-roles.md
+  prompt: "What is DevOps?"
+  options:
+  - id: a
+    text: "A Kubernetes component."
+    explanation: "It is not software."
+  - id: b
+    text: "A cloud provider service."
+    explanation: "It is not a service."
+  - id: c
+    text: "A job title for operations staff."
+    explanation: "DevOps is not only a title."
+  - id: d
+    text: "A culture and set of practices that bring development and operations together with automation and fast feedback."
+    explanation: "Correct."
+  correct_option: d
+  explanation: "Correct."
+- id: ats040-020-m06-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain a golden path"
+  source_readings:
+  - sections/section-020/module-06/course-02-platform-engineering-and-team-topologies.md
+  prompt: "What is a golden path in platform engineering?"
+  options:
+  - id: a
+    text: "A supported, documented way to do a common task that is the easiest option but not the only one."
+    explanation: "Correct."
+  - id: b
+    text: "A rule that forbids all other tools."
+    explanation: "A golden path is not forced."
+  - id: c
+    text: "A faster network route between clusters."
+    explanation: "It has no relation to networking."
+  - id: d
+    text: "A release branch name."
+    explanation: "It is not a branch."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-020-m06-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "State the platform aim"
+  source_readings:
+  - sections/section-020/module-06/course-02-platform-engineering-and-team-topologies.md
+  prompt: "What is the main aim of an internal developer platform?"
+  options:
+  - id: a
+    text: "To replace developers with automation."
+    explanation: "It supports developers."
+  - id: b
+    text: "To give developers self-service and reduce their cognitive load."
+    explanation: "Correct."
+  - id: c
+    text: "To reduce the number of clusters to one."
+    explanation: "The aim is not cluster count."
+  - id: d
+    text: "To remove the need for security review."
+    explanation: "It builds guardrails; it does not remove review."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-020-m06-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick the scope"
+  source_readings:
+  - sections/section-020/module-06/course-03-role-based-access-control-for-personas.md
+  prompt: "Which object gives a user the permissions of a Role in one namespace?"
+  options:
+  - id: a
+    text: "NetworkPolicy"
+    explanation: "It controls traffic."
+  - id: b
+    text: "ClusterRoleBinding"
+    explanation: "It applies to the whole cluster."
+  - id: c
+    text: "RoleBinding"
+    explanation: "Correct."
+  - id: d
+    text: "ServiceAccount"
+    explanation: "A subject, not a grant."
+  correct_option: c
+  explanation: "Correct."
+- id: ats040-020-m06-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Apply least privilege"
+  source_readings:
+  - sections/section-020/module-06/course-03-role-based-access-control-for-personas.md
+  prompt: "An auditor must only inspect Pods in one namespace. What is the best grant?"
+  options:
+  - id: a
+    text: "A deny rule for everything else"
+    explanation: "RBAC has no deny rules."
+  - id: b
+    text: "cluster-admin through a ClusterRoleBinding"
+    explanation: "This is far too broad."
+  - id: c
+    text: "A Role with verbs [\"*\"] on all resources"
+    explanation: "A wildcard is too broad."
+  - id: d
+    text: "A Role that allows get, list and watch on pods, bound with a RoleBinding in that namespace."
+    explanation: "Correct."
+  correct_option: d
+  explanation: "Correct."
+- id: ats040-020-m06-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Test access"
+  source_readings:
+  - sections/section-020/module-06/course-03-role-based-access-control-for-personas.md
+  prompt: "Which command checks whether the user riker may delete Deployments in the namespace starfleet?"
+  options:
+  - id: a
+    text: "kubectl auth can-i delete deployments --as riker -n starfleet"
+    explanation: "Correct."
+  - id: b
+    text: "kubectl describe role riker"
+    explanation: "There is no such role by that name necessarily."
+  - id: c
+    text: "kubectl top deployments -n starfleet"
+    explanation: "It shows usage."
+  - id: d
+    text: "kubectl get deployments --user riker"
+    explanation: "This lists; it does not check delete access."
+  correct_option: a
+  explanation: "Correct."
+- id: ats040-020-m06-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Calculate an SLO term"
+  source_readings:
+  - sections/section-020/module-06/course-04-devops-and-site-reliability-engineering-practices.md
+  prompt: "What is an error budget?"
+  options:
+  - id: a
+    text: "The money set aside for incident response."
+    explanation: "It is a measure of allowed failure, not money."
+  - id: b
+    text: "The amount of failure the SLO allows over a period, which decides whether the team ships changes or works on reliability."
+    explanation: "Correct."
+  - id: c
+    text: "The number of bugs in the backlog."
+    explanation: "It is not a bug count."
+  - id: d
+    text: "The CPU limit of a pod."
+    explanation: "It has no relation to resources."
+  correct_option: b
+  explanation: "Correct."
+- id: ats040-020-m06-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Tell the terms apart"
+  source_readings:
+  - sections/section-020/module-06/course-04-devops-and-site-reliability-engineering-practices.md
+  prompt: "Which statement about SLO and SLA is correct?"
+  options:
+  - id: a
+    text: "An SLA measures only latency."
+    explanation: "An SLA can cover other measures."
+  - id: b
+    text: "An SLO is a contract with penalties."
+    explanation: "That is an SLA."
+  - id: c
+    text: "An SLO is an internal target for an indicator, and an SLA is a contract with consequences when it is missed."
+    explanation: "Correct."
+  - id: d
+    text: "They mean the same thing."
+    explanation: "They differ."
+  correct_option: c
+  explanation: "Correct."

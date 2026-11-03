@@ -1,0 +1,237 @@
+# Knowledge check for module 04 of section 010. Contract: schemas/question-bank.schema.json.
+# Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats040-010-m04
+course_id: ATS040
+exam_code: KCNA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Cloud Cost Management"
+placement:
+  position: after
+  reading: sections/section-010/module-04/course-05-summary.md
+questions:
+- id: ats040-010-m04-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the cost drivers"
+  source_readings:
+  - sections/section-010/module-04/course-01-cost-drivers-and-finops.md
+  prompt: "Which list names the main cost drivers of a Kubernetes cluster?"
+  options:
+  - id: a
+    text: "Pods, containers and images"
+    explanation: "These use the resources that are billed. The bill itself lists nodes, disks and traffic."
+  - id: b
+    text: "Compute, storage, network and load balancers"
+    explanation: "Correct. Managed services are a fifth part, and compute is usually the largest."
+  - id: c
+    text: "Deployments, Services and ConfigMaps"
+    explanation: "These are API objects and do not appear on a provider bill."
+  - id: d
+    text: "Labels, annotations and namespaces"
+    explanation: "These are metadata and cost nothing by themselves."
+  correct_option: b
+  explanation: "Correct. Managed services are a fifth part, and compute is usually the largest."
+- id: ats040-010-m04-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define FinOps"
+  source_readings:
+  - sections/section-010/module-04/course-01-cost-drivers-and-finops.md
+  prompt: "What are the three phases of FinOps?"
+  options:
+  - id: a
+    text: "Plan, build and run"
+    explanation: "These are common delivery phases and not the FinOps phases."
+  - id: b
+    text: "Tag, scale and delete"
+    explanation: "These are single actions, not phases."
+  - id: c
+    text: "Inform, optimize and operate"
+    explanation: "Correct. The phases repeat as a loop."
+  - id: d
+    text: "Request, limit and quota"
+    explanation: "These are Kubernetes resource settings."
+  correct_option: c
+  explanation: "Correct. The phases repeat as a loop."
+- id: ats040-010-m04-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Use unit cost"
+  source_readings:
+  - sections/section-010/module-04/course-01-cost-drivers-and-finops.md
+  prompt: "The cloud bill of a service rose by 20 percent, and its number of orders rose by 50 percent. What does this show?"
+  options:
+  - id: a
+    text: "The service must be moved to spot nodes."
+    explanation: "The data does not support that decision."
+  - id: b
+    text: "Efficiency fell, because the bill rose."
+    explanation: "The bill rose less than the business did."
+  - id: c
+    text: "Nothing, because only the total counts."
+    explanation: "Unit cost is the better measure."
+  - id: d
+    text: "The cost per order fell, so efficiency improved."
+    explanation: "Correct. Unit cost relates the bill to a business measure."
+  correct_option: d
+  explanation: "Correct. Unit cost relates the bill to a business measure."
+- id: ats040-010-m04-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Explain why requests matter"
+  source_readings:
+  - sections/section-010/module-04/course-02-requests-usage-quota-and-rightsizing.md
+  prompt: "Why do the resource requests of pods affect the number of nodes a cluster needs?"
+  options:
+  - id: a
+    text: "The scheduler reserves the requested amount, whatever the pod uses."
+    explanation: "Correct. Reserved capacity must fit on nodes, so oversized requests need more nodes."
+  - id: b
+    text: "The kubelet bills each pod for its requests."
+    explanation: "The kubelet does not bill. The provider bills nodes."
+  - id: c
+    text: "Requests are the maximum a container may use."
+    explanation: "That is the limit."
+  - id: d
+    text: "Requests only matter for memory."
+    explanation: "The scheduler uses CPU and memory requests."
+  correct_option: a
+  explanation: "Correct. Reserved capacity must fit on nodes, so oversized requests need more nodes."
+- id: ats040-010-m04-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read the QoS class"
+  source_readings:
+  - sections/section-010/module-04/course-02-requests-usage-quota-and-rightsizing.md
+  prompt: "A pod has no requests and no limits on any container. Which class does it get, and what does that mean?"
+  options:
+  - id: a
+    text: "Burstable, so it can use any free CPU without limit."
+    explanation: "Burstable needs at least one request or limit."
+  - id: b
+    text: "BestEffort, so it is evicted first under memory pressure."
+    explanation: "Correct. It reserves nothing and has the lowest priority."
+  - id: c
+    text: "No class, so it is not scheduled."
+    explanation: "Every pod gets a class."
+  - id: d
+    text: "Guaranteed, so it is evicted last."
+    explanation: "Guaranteed needs requests equal to limits."
+  correct_option: b
+  explanation: "Correct. It reserves nothing and has the lowest priority."
+- id: ats040-010-m04-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Apply a quota"
+  source_readings:
+  - sections/section-010/module-04/course-02-requests-usage-quota-and-rightsizing.md
+  prompt: "A namespace has a ResourceQuota for requests.cpu. A pod without a CPU request is created and no LimitRange exists. What happens?"
+  options:
+  - id: a
+    text: "The pod starts as BestEffort."
+    explanation: "With a CPU quota, a missing request is not accepted."
+  - id: b
+    text: "The quota is ignored for that pod."
+    explanation: "The quota applies to all pods in the namespace."
+  - id: c
+    text: "The API server rejects the pod."
+    explanation: "Correct. A LimitRange default request would avoid the rejection."
+  - id: d
+    text: "The pod starts with 1 CPU."
+    explanation: "There is no such default."
+  correct_option: c
+  explanation: "Correct. A LimitRange default request would avoid the rejection."
+- id: ats040-010-m04-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Choose the right-sizing margin"
+  source_readings:
+  - sections/section-010/module-04/course-02-requests-usage-quota-and-rightsizing.md
+  prompt: "Why does memory need a larger safety margin than CPU when right-sizing?"
+  options:
+  - id: a
+    text: "Memory requests are ignored by the scheduler."
+    explanation: "The scheduler uses memory requests."
+  - id: b
+    text: "Memory usage never changes."
+    explanation: "It changes, and the maximum is what counts."
+  - id: c
+    text: "Memory costs more per unit."
+    explanation: "This is not the reason for the margin."
+  - id: d
+    text: "A container above its memory limit is killed, while CPU above the limit is only throttled."
+    explanation: "Correct. A memory overrun ends the container."
+  correct_option: d
+  explanation: "Correct. A memory overrun ends the container."
+- id: ats040-010-m04-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Separate showback from chargeback"
+  source_readings:
+  - sections/section-010/module-04/course-03-allocation-labels-and-cost-tools.md
+  prompt: "What is showback?"
+  options:
+  - id: a
+    text: "Reporting cost to each team without billing it."
+    explanation: "Correct. Chargeback moves the cost to the budget of the team."
+  - id: b
+    text: "Billing each team's budget for its cloud cost."
+    explanation: "That is chargeback."
+  - id: c
+    text: "Restoring a deleted namespace."
+    explanation: "This is not a cost term."
+  - id: d
+    text: "Showing the pods of a node."
+    explanation: "This is not a cost term."
+  correct_option: a
+  explanation: "Correct. Chargeback moves the cost to the budget of the team."
+- id: ats040-010-m04-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know the OpenCost role"
+  source_readings:
+  - sections/section-010/module-04/course-03-allocation-labels-and-cost-tools.md
+  prompt: "What does OpenCost do?"
+  options:
+  - id: a
+    text: "It replaces Prometheus."
+    explanation: "It exposes Prometheus metrics and reads Prometheus data."
+  - id: b
+    text: "It measures and allocates Kubernetes cost by namespace, label and workload."
+    explanation: "Correct. It is a CNCF project for real-time cost monitoring."
+  - id: c
+    text: "It schedules pods on the cheapest node."
+    explanation: "The scheduler does not use cost data."
+  - id: d
+    text: "It buys spot capacity for the cluster."
+    explanation: "It reports cost and does not buy capacity."
+  correct_option: b
+  explanation: "Correct. It is a CNCF project for real-time cost monitoring."
+- id: ats040-010-m04-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Match a workload to spot"
+  source_readings:
+  - sections/section-010/module-04/course-04-purchasing-options-and-scaling-levers.md
+  prompt: "Which workload suits spot nodes best?"
+  options:
+  - id: a
+    text: "A cluster control plane component"
+    explanation: "It must stay on stable nodes."
+  - id: b
+    text: "A single-replica database with local storage"
+    explanation: "An interruption would cause an outage and data risk."
+  - id: c
+    text: "A batch Job that checkpoints its progress and can be retried"
+    explanation: "Correct. It tolerates loss of a node."
+  - id: d
+    text: "The only ingress controller replica"
+    explanation: "It would take down all traffic."
+  correct_option: c
+  explanation: "Correct. It tolerates loss of a node."

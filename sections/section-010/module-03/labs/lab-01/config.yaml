@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Record Latency And Alert On It With PromQL (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-010-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+      - quay.io/prometheus/prometheus:v3.5.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: group
+      description: "Rule group scout-latency is loaded and every rule is healthy"
+      type: file
+      source: validation/validate-group.sh
+      hint: "Put the rules under groups in rules.yml, apply the ConfigMap and restart Prometheus."
+    - name: rate-rule
+      description: "Recording rule scout:http_requests:rate5m sums rate of http_requests_total over 5m"
+      type: file
+      source: validation/validate-rate-rule.sh
+      hint: "Use sum(rate(http_requests_total{job=\"scout\"}[5m]))."
+    - name: p95-rule
+      description: "Recording rule scout:http_request_duration_seconds:p95_5m uses histogram_quantile 0.95 over summed bucket rates by le"
+      type: file
+      source: validation/validate-p95-rule.sh
+      hint: "Use histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"scout\"}[5m])))."
+    - name: alert
+      description: "Alert ScoutSlow fires above 0.5 for 5 minutes with label severity=ticket and a summary annotation"
+      type: file
+      source: validation/validate-alert.sh
+      hint: "Set expr to the recorded p95 > 0.5, for: 5m, labels.severity: ticket and annotations.summary."
+
+teardown:
+  keepCluster: false

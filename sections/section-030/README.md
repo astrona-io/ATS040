@@ -5,9 +5,9 @@ exam_objectives:
 ---
 # Cloud Native Community and Collaboration
 
-This section teaches community and collaboration; API maturity and deprecation. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario, and you apply them on a kind cluster.
+This section teaches community and collaboration; API maturity and deprecation; CNCF structure and Kubernetes governance. These ideas help you explain system behavior and choose a suitable approach in a KCNA scenario, and you apply them on a kind cluster.
 
-You will work through Community And Collaboration, API Maturity And Deprecation. Each module introduces its goals, teaches the concepts through examples, offers a playground for free practice and a graded lab, and closes with a summary. The section ends with an integration capstone and a knowledge check.
+You will work through Community And Collaboration, API Maturity And Deprecation, CNCF Structure And Kubernetes Governance. Each module introduces its goals, teaches the concepts through examples, offers a playground for free practice and a graded lab, and closes with a summary. The section ends with an integration capstone and a knowledge check.
 
 ## Learning Outcomes
 
@@ -20,3 +20,5 @@ You will work through Community And Collaboration, API Maturity And Deprecation.
 - Apply the deprecation policy windows to a version that is going away.
 - Find clients that still use deprecated versions.
 - Migrate manifests to current versions and check them with a server-side dry run and a diff.
+- Describe the CNCF TOC, TAGs and end user community.
+- Describe SIGs, working groups, the steering committee and KEPs.

@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Configure Telemetry For A Workload (LAB). Graded against the live cluster.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-040-lab-010-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+# Starting state.
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the starting objects
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: service-name
+      description: "OTEL_SERVICE_NAME is scout"
+      type: file
+      source: validation/validate-service-name.sh
+      hint: "Use kubectl set env deployment/scout OTEL_SERVICE_NAME=scout."
+    - name: exporter
+      description: "The exporter endpoint is http://collector.starfleet:4318 with protocol http/protobuf"
+      type: file
+      source: validation/validate-exporter.sh
+      hint: "Set OTEL_EXPORTER_OTLP_ENDPOINT and OTEL_EXPORTER_OTLP_PROTOCOL."
+    - name: sampler
+      description: "The sampler is parentbased_traceidratio with argument 0.25"
+      type: file
+      source: validation/validate-sampler.sh
+      hint: "Set OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG; quote 0.25 as a string."
+    - name: receiver
+      description: "ConfigMap collector-config defines an otlp HTTP receiver on 0.0.0.0:4318 and the processors memory_limiter and batch"
+      type: file
+      source: validation/validate-receiver.sh
+      hint: "Put the file under the key config.yaml and define receivers.otlp.protocols.http.endpoint."
+    - name: pipelines
+      description: "Pipelines traces and metrics use otlp, then memory_limiter and batch in order, then debug"
+      type: file
+      source: validation/validate-pipelines.sh
+      hint: "Write processors: [memory_limiter, batch] in both pipelines."
+
+teardown:
+  keepCluster: false
