@@ -5,7 +5,7 @@ kind: question_bank
 id: ats040-010-m03
 course_id: ATS040
 exam_code: KCNA
-status: draft
+status: alpha
 provenance: Original practice material written for this course; not official exam questions.
 scope:
   type: section
