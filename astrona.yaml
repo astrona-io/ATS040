@@ -599,7 +599,7 @@ modules:
         difficulty: intermediate
         estimated_duration: 25m
         topic: community
-        task_kind: troubleshoot
+        task_kind: troubleshooting
         tags: [issue-report, readiness-probe, change-cause, rollout, kubectl-diff]
         learning_goals:
           - Write an issue report that names the symptom, the cause and the owning group
@@ -704,7 +704,7 @@ modules:
         difficulty: advanced
         estimated_duration: 30m
         topic: api-lifecycle
-        task_kind: troubleshoot
+        task_kind: troubleshooting
         tags: [readiness-probe, change-cause, cronjob, api-deprecation, sig, issue-report]
         learning_goals:
           - Fix a failing readiness probe and record the cause of the change
