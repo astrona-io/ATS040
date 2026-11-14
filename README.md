@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://astrona.io/courses/kubernetes-and-cloud-native-associate-kcna">
+    <img src="https://astrona.io/courses/kubernetes-and-cloud-native-associate-kcna/domains/ATS040.svg" alt="ATS040: Cloud Native Architecture, part of the Kubernetes and Cloud Native Associate course on Astrona" width="100%">
+  </a>
+</p>
+
 # Cloud Native Architecture (ATS040)
 
 Kubernetes and Cloud Native Associate (KCNA) — Cloud Native Architecture, 12% of the published curriculum. This course is part of ATP008.
